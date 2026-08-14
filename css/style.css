@@ -1,0 +1,197 @@
+/* ==========================================================================
+   CELL CITY — GLOBAL STYLESHEET
+   Phase 1: Project Foundation (light theme revision)
+
+   Loaded AFTER Bootstrap in the HTML <head> so these rules win and give
+   Bootstrap's structural components (container, grid, buttons, cards, nav)
+   the Cell City look instead of the Bootstrap default appearance.
+   ========================================================================== */
+
+/* ========================================
+   1. DESIGN TOKENS
+   ======================================== */
+:root {
+  /* backgrounds */
+  --color-bg: #f7fafc;
+  --color-bg-secondary: #eef5f7;
+
+  /* text */
+  --color-text-primary: #102a43;
+  --color-text-secondary: #52677a;
+
+  /* accents */
+  --color-accent: #009fb0; /* links, primary interactive elements */
+  --color-accent-secondary: #0e9f6e; /* biology / success */
+  --color-energy: #d98e00; /* ATP / energy */
+  --color-danger: #d6455d; /* errors / warnings / waste */
+  --color-mutation: #7c3aed; /* mutations / special scientific states */
+  --gradient-biology: linear-gradient(135deg, #0e9f6e, #009fb0);
+
+  /* surfaces */
+  --color-panel: rgba(255, 255, 255, 0.82);
+  --color-panel-border: #dce7ee;
+  --shadow-panel: 0 8px 30px rgba(16, 42, 67, 0.08);
+
+  /* shared metrics */
+  --font-base: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius-md: 8px;
+}
+
+/* ========================================
+   2. RESET & BASE
+   ======================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* ========================================
+   3. TYPOGRAPHY
+   ======================================== */
+body {
+  font-family: var(--font-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 0.5em;
+}
+
+h1 {
+  font-size: 2.25rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0 0 1em;
+  max-width: 70ch;
+}
+
+/* ========================================
+   4. LINKS
+   ======================================== */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-accent-secondary);
+  text-decoration: underline;
+}
+
+/* ========================================
+   5. BUTTONS
+   ======================================== */
+.btn-cell-city {
+  display: inline-block;
+  font-family: var(--font-base);
+  font-size: 1rem;
+  padding: 0.6em 1.4em;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-cell-city:hover {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-cell-city-secondary {
+  border-color: var(--color-accent-secondary);
+  color: var(--color-accent-secondary);
+}
+
+.btn-cell-city-secondary:hover {
+  background-color: var(--color-accent-secondary);
+  color: #ffffff;
+}
+
+/* ========================================
+   6. LAYOUT
+   ======================================== */
+header,
+main,
+footer {
+  padding: 1.5rem;
+}
+
+nav a {
+  margin-right: 1rem;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+/* ========================================
+   7. PANELS
+   ======================================== */
+.glass-panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-border);
+  box-shadow: var(--shadow-panel);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+/* ========================================
+   8. ACCESSIBILITY
+   ======================================== */
+a:focus-visible,
+.btn-cell-city:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   9. RESPONSIVE FOUNDATION
+   ======================================== */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  header,
+  main,
+  footer {
+    padding: 1rem;
+  }
+}
