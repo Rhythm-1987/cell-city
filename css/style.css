@@ -176,6 +176,9 @@ section {
 }
 
 .cell-city-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
@@ -207,7 +210,16 @@ section {
 }
 
 /* ========================================
-   8. PANELS
+   8. BRAND / LOGO
+   ======================================== */
+.cell-city-logo {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0; /* keep the mark from shrinking when space is tight */
+}
+
+/* ========================================
+   9. PANELS
    ======================================== */
 .glass-panel {
   background: var(--color-panel);
@@ -218,7 +230,7 @@ section {
 }
 
 /* ========================================
-   9. ACCESSIBILITY
+   10. ACCESSIBILITY
    ======================================== */
 a:focus-visible,
 .btn-cell-city:focus-visible {
@@ -227,7 +239,7 @@ a:focus-visible,
 }
 
 /* ========================================
-   10. RESPONSIVE FOUNDATION
+   11. RESPONSIVE FOUNDATION
    ======================================== */
 @media (max-width: 600px) {
   h1 {

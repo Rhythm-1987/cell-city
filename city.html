@@ -19,7 +19,28 @@
   <body>
     <nav class="navbar cell-city-navbar">
       <div class="container cell-city-navbar__container">
-        <a class="navbar-brand cell-city-navbar__brand" href="index.html">Cell City</a>
+        <a
+          class="navbar-brand cell-city-navbar__brand"
+          href="index.html"
+          aria-label="Cell City home"
+        >
+          <svg
+            class="cell-city-logo"
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <!-- cell membrane -->
+            <circle cx="16" cy="16" r="14" fill="none" stroke="#009fb0" stroke-width="2" />
+            <!-- nucleus -->
+            <circle cx="16" cy="16" r="6" fill="#0e9f6e" />
+            <!-- organelles -->
+            <circle cx="24" cy="10" r="2" fill="#009fb0" />
+            <circle cx="9" cy="22" r="1.6" fill="#102a43" />
+            <circle cx="23" cy="22" r="1.4" fill="#0e9f6e" />
+          </svg>
+          <span class="cell-city-navbar__brand-text">Cell City</span>
+        </a>
         <ul class="navbar-nav cell-city-navbar__nav">
           <li class="nav-item">
             <a class="nav-link cell-city-navbar__link" href="index.html">Home</a>
