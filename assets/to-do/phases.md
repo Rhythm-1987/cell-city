@@ -14,10 +14,10 @@ markdown_content = """# Cell City Project To-Do List
 
 ## PHASE 2 — Global UI
 
-- [ ] Element 1: Global background/theme
+- [+] Element 1: Global background/theme
 - [+] Element 2: Navbar
 - [+] Element 3: Brand/logo
-- [ ] Element 4: Navigation links
+- [+] Element 4: Navigation links
 - [ ] Element 5: Responsive mobile navigation
 - [ ] Element 6: Footer
 

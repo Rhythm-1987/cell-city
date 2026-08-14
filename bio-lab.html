@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cell City — Bio Lab</title>
+
+    <!-- Bootstrap (structural components only — Cell City look comes from style.css below) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    />
+
+    <!-- Cell City design system — loaded after Bootstrap so it takes priority -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="js/main.js" defer></script>
+  </head>
+  <body>
+    <nav class="navbar cell-city-navbar">
+      <div class="container-fluid cell-city-navbar__container">
+        <a
+          class="navbar-brand cell-city-navbar__brand"
+          href="index.html"
+          aria-label="Cell City home"
+        >
+          <svg
+            class="cell-city-logo"
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <!-- cell membrane -->
+            <circle cx="16" cy="16" r="14" fill="none" stroke="#009fb0" stroke-width="2" />
+            <!-- nucleus -->
+            <circle cx="16" cy="16" r="6" fill="#0e9f6e" />
+            <!-- organelles -->
+            <circle cx="24" cy="10" r="2" fill="#009fb0" />
+            <circle cx="9" cy="22" r="1.6" fill="#102a43" />
+            <circle cx="23" cy="22" r="1.4" fill="#0e9f6e" />
+          </svg>
+          <span class="cell-city-navbar__brand-text">Cell City</span>
+        </a>
+        <ul class="navbar-nav cell-city-navbar__nav">
+          <li class="nav-item">
+            <a class="nav-link cell-city-navbar__link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cell-city-navbar__link" href="city.html">City</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cell-city-navbar__link" href="organelles.html">Organelles</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cell-city-navbar__link" href="bio-lab.html">Bio Lab</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cell-city-navbar__link" href="missions.html">Missions</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <main>
+      <section>
+        <h2>Bio Lab</h2>
+        <p>Analyze DNA sequences in the Cell City Bioinformatics Lab.</p>
+        <p>This section will be developed during Phase 6.</p>
+      </section>
+    </main>
+
+    <!-- Bootstrap JS bundle (includes Popper) — no components use it yet, wired in for later phases -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+  </body>
+</html>

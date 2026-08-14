@@ -173,6 +173,11 @@ section {
   justify-content: space-between;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  /* Match <main>'s 1.5rem side padding (see LAYOUT) so the brand lines up
+     with the page content below instead of Bootstrap's centered, capped
+     .container width. */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .cell-city-navbar__brand {
