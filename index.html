@@ -76,41 +76,183 @@
       </div>
     </nav>
     <main>
-      <section>
-        <h2>Welcome to Cell City!!</h2>
-        <p>
-          Cell City is an interactive educational website that represents a
-          biological cell as a small, functioning city. In this concept, each
-          organelle is given a city-based role—for example, the nucleus acts
-          like the city’s central administration, mitochondria like power
-          plants, ribosomes like protein factories, and the Golgi apparatus like
-          a packaging and distribution center. Users can explore these
-          structures, understand their real biological functions, and follow
-          processes such as DNA → RNA → protein and nutrient → ATP production.
-          The project also includes a Bioinformatics Lab with features such as
-          DNA sequence analysis, GC-content calculation, transcription,
-          translation, codon exploration, and mutation visualization, making
-          Cell City both a creative learning environment and a practical
-          demonstration of web development and bioinformatics concepts.
-        </p>
+      <!-- ============ HERO ============ -->
+      <section class="hero-section">
+        <div class="container-fluid home-container">
+          <div class="row align-items-center hero-section__row">
+            <div class="col-lg-6 hero-section__content">
+              <p class="hero-section__eyebrow">Cell City</p>
+              <h1 class="hero-section__heading">Explore the cell like a city.</h1>
+              <p class="hero-section__lead">
+                Discover how organelles work together through an interactive,
+                city-based model of biological systems.
+              </p>
+              <div class="hero-section__actions">
+                <a class="btn-cell-city" href="city.html">Explore the Cell</a>
+                <a class="btn-cell-city btn-cell-city-secondary" href="bio-lab.html"
+                  >Enter Bio Lab</a
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 hero-section__media">
+              <img
+                class="hero-section__image"
+                src="assets/images/Cutaway-drawing-cell.webp"
+                alt="Cutaway illustration of an animal cell showing the nucleus, mitochondria, and other organelles"
+              />
+            </div>
+          </div>
+        </div>
       </section>
-      <section>
-        <h2>Explore the Cell</h2>
-        <p>
-          In Cell City, the different organelles will be represented as
-          important parts of a functioning city, making their biological roles
-          easier to understand through familiar real-world examples. The nucleus
-          will act as the city hall, mitochondria as power plants, ribosomes as
-          protein factories, the rough and smooth ER as manufacturing and
-          processing networks, the Golgi apparatus as a packaging and
-          distribution center, lysosomes as recycling and waste-management
-          centers, vesicles as delivery vehicles, and the cytoskeleton as the
-          city's internal road system. The cell membrane will form the city's
-          outer boundary, while the cytoplasm will represent the environment in
-          which everything operates. This city-based representation will allow
-          users to visually explore how different organelles work individually
-          and how they cooperate to keep the cell functioning.
-        </p>
+
+      <!-- ============ WHAT IS CELL CITY? ============ -->
+      <section class="intro-section">
+        <div class="container-fluid home-container">
+          <div class="row intro-section__row">
+            <div class="col-lg-6 intro-section__text">
+              <h2>What is Cell City?</h2>
+              <p>
+                Cell City represents a biological cell as a small, functioning
+                city. Every organelle takes on a matching civic role — the
+                nucleus governs like city hall, mitochondria generate power
+                like plants, and the Golgi apparatus packages and ships goods
+                like a distribution center.
+              </p>
+              <p>
+                As you explore, you'll follow real biological processes — DNA
+                transcribed into RNA, RNA translated into protein, nutrients
+                converted into ATP — mapped onto the same systems that keep
+                any city running.
+              </p>
+            </div>
+            <div class="col-lg-6">
+              <div class="glass-panel intro-section__panel">
+                <p class="intro-section__panel-title">Cell &rarr; City</p>
+                <dl class="intro-section__mapping">
+                  <div class="intro-section__mapping-row">
+                    <dt>Nucleus</dt>
+                    <dd>City Hall</dd>
+                  </div>
+                  <div class="intro-section__mapping-row">
+                    <dt>Mitochondria</dt>
+                    <dd>Power Plants</dd>
+                  </div>
+                  <div class="intro-section__mapping-row">
+                    <dt>Ribosomes</dt>
+                    <dd>Protein Factories</dd>
+                  </div>
+                  <div class="intro-section__mapping-row">
+                    <dt>Golgi Apparatus</dt>
+                    <dd>Distribution Centre</dd>
+                  </div>
+                  <div class="intro-section__mapping-row">
+                    <dt>Endoplasmic Reticulum</dt>
+                    <dd>Manufacturing Network</dd>
+                  </div>
+                  <div class="intro-section__mapping-row">
+                    <dt>Lysosomes</dt>
+                    <dd>Recycling Centers</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EXPLORE CELL CITY ============ -->
+      <section class="explore-section">
+        <div class="container-fluid home-container">
+          <h2>Explore Cell City</h2>
+          <div class="row explore-section__cards">
+            <div class="col-md-4">
+              <article class="feature-card">
+                <svg
+                  class="feature-card__icon feature-card__icon--cell"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="2" />
+                  <circle cx="24" cy="24" r="7" fill="currentColor" />
+                  <circle cx="34" cy="16" r="2.4" fill="currentColor" />
+                  <circle cx="14" cy="32" r="2" fill="currentColor" />
+                </svg>
+                <h3 class="feature-card__title">Explore the Cell</h3>
+                <p class="feature-card__desc">
+                  Discover organelles and understand how they work together.
+                </p>
+                <a class="feature-card__link" href="city.html">Enter the City</a>
+              </article>
+            </div>
+
+            <div class="col-md-4">
+              <article class="feature-card">
+                <svg
+                  class="feature-card__icon feature-card__icon--lab"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M18 6h12M19 6v12l-9 20a4 4 0 0 0 4 6h20a4 4 0 0 0 4-6l-9-20V6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path d="M14 30h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <h3 class="feature-card__title">Bioinformatics Lab</h3>
+                <p class="feature-card__desc">
+                  Analyze DNA sequences and explore molecular information.
+                </p>
+                <a class="feature-card__link" href="bio-lab.html">Enter the Lab</a>
+              </article>
+            </div>
+
+            <div class="col-md-4">
+              <article class="feature-card">
+                <svg
+                  class="feature-card__icon feature-card__icon--missions"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="2" />
+                  <path
+                    d="M16 25l6 6 12-14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <h3 class="feature-card__title">Missions</h3>
+                <p class="feature-card__desc">
+                  Test your knowledge through interactive biology challenges.
+                </p>
+                <a class="feature-card__link" href="missions.html">Start a Mission</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CALL TO ACTION ============ -->
+      <section class="cta-section">
+        <div class="container-fluid home-container">
+          <div class="cta-section__panel">
+            <h2>Ready to explore Cell City?</h2>
+            <p>
+              Start with the cell and discover how its microscopic systems
+              work together.
+            </p>
+            <a class="btn-cell-city" href="city.html">Enter the City</a>
+          </div>
+        </div>
       </section>
     </main>
     <footer class="cell-city-footer">

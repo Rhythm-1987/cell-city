@@ -23,14 +23,14 @@ markdown_content = """# Cell City Project To-Do List
 
 ## 🏠 PHASE 3 — Home Page
 
-- [ ] Element 7: Hero section
-- [ ] Element 8: Hero heading
-- [ ] Element 9: Hero description
-- [ ] Element 10: CTA button
-- [ ] Element 11: Cell-city preview
+- [+] Element 7: Hero section
+- [+] Element 8: Hero heading
+- [+] Element 9: Hero description
+- [+] Element 10: CTA button
+- [+] Element 11: Cell-city preview
 - [ ] Element 12: Organelle cards
 - [ ] Element 13: Central Dogma visualization
-- [ ] Element 14: "How Cell City Works" section
+- [+] Element 14: "How Cell City Works" section
 
 ## 🏙️ PHASE 4 — Interactive Cell City
 

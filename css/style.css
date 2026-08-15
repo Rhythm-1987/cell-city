@@ -380,3 +380,213 @@ a:focus-visible,
     padding: 1rem;
   }
 }
+
+/* ========================================
+   14. HOME PAGE
+   ======================================== */
+
+/* Shared wrapper: container-fluid has no max-width, so on wide screens the
+   hero/cards would stretch edge-to-edge. Cap it and center it instead. */
+.home-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Hero --- */
+.hero-section {
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+}
+
+.hero-section__row {
+  gap: 2rem 0;
+}
+
+.hero-section__eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-section__heading {
+  font-size: 2.75rem;
+  margin-bottom: 0.6em;
+}
+
+.hero-section__lead {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  max-width: 42ch;
+}
+
+.hero-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.hero-section__media {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-section__image {
+  max-width: 420px;
+  width: 100%;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  border: 1px solid var(--color-panel-border);
+  background: #ffffff;
+}
+
+/* --- What is Cell City? --- */
+.intro-section__row {
+  align-items: center;
+  gap: 1.5rem 0;
+}
+
+.intro-section__panel-title {
+  margin: 0 0 1rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.intro-section__mapping {
+  margin: 0;
+}
+
+.intro-section__mapping-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--color-panel-border);
+}
+
+.intro-section__mapping-row:first-child {
+  border-top: none;
+}
+
+.intro-section__mapping-row dt {
+  color: var(--color-text-secondary);
+}
+
+.intro-section__mapping-row dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* --- Explore Cell City (feature cards) --- */
+.explore-section__cards {
+  margin-top: 1rem;
+  row-gap: 1.5rem;
+}
+
+.feature-card {
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  padding: 1.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(16, 42, 67, 0.12);
+}
+
+.feature-card__icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
+}
+
+.feature-card__icon--cell {
+  color: var(--color-accent);
+}
+
+.feature-card__icon--lab {
+  color: var(--color-accent-secondary);
+}
+
+.feature-card__icon--missions {
+  color: var(--color-energy);
+}
+
+.feature-card__title {
+  margin-bottom: 0.4em;
+}
+
+.feature-card__desc {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.feature-card__link {
+  font-weight: 600;
+}
+
+/* --- Call to action --- */
+.cta-section__panel {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.cta-section__panel p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 991.98px) {
+  .hero-section__content {
+    text-align: center;
+  }
+
+  .hero-section__lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-section__actions {
+    justify-content: center;
+  }
+
+  .hero-section__media {
+    margin-top: 1.5rem;
+  }
+
+  .intro-section__text {
+    text-align: center;
+  }
+
+  .intro-section__text p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .intro-section__panel {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-section__heading {
+    font-size: 2rem;
+  }
+}
