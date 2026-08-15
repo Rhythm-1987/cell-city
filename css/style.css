@@ -148,8 +148,7 @@ a:hover {
    6. LAYOUT
    ======================================== */
 header,
-main,
-footer {
+main {
   padding: 1.5rem;
 }
 
@@ -196,8 +195,9 @@ section {
 
 .cell-city-navbar__nav {
   display: flex;
-  flex-direction: row; /* overrides Bootstrap's .navbar-nav column default */
-  align-items: center;
+  /* Mobile default: links stack vertically inside the collapsed menu.
+     Row layout is restored at the lg breakpoint below. */
+  flex-direction: column;
   gap: 1.5rem;
   margin: 0;
   padding: 0;
@@ -215,7 +215,57 @@ section {
 }
 
 /* ========================================
-   8. BRAND / LOGO
+   8. RESPONSIVE NAVBAR
+   ======================================== */
+
+/* Desktop (Bootstrap's lg breakpoint, matches navbar-expand-lg on <nav>):
+   restore the original approved horizontal layout. */
+@media (min-width: 992px) {
+  .cell-city-navbar__nav {
+    flex-direction: row;
+    align-items: center;
+    /* Bootstrap's base .navbar-collapse rule sets flex-grow: 1 at every
+       width, and navbar-expand-lg never resets it back to 0 — so at
+       desktop the collapse <div> stretches to fill the space after the
+       brand, leaving this <ul> flush against its left edge. Pushing the
+       <ul> itself to the right edge of that now-wide box is the standard
+       fix (equivalent to Bootstrap's ms-auto utility). */
+    margin-left: auto;
+  }
+}
+
+/* Mobile/tablet: give the opened menu breathing room below the
+   brand/toggler row instead of touching it. Desktop is untouched because
+   .navbar-expand-lg keeps .navbar-collapse inline at 992px and up. */
+@media (max-width: 991.98px) {
+  .cell-city-navbar .navbar-collapse {
+    padding-top: 1rem;
+  }
+}
+
+/* Toggler: match the light Cell City theme instead of Bootstrap's default
+   blue focus ring / icon color. */
+.cell-city-navbar .navbar-toggler {
+  border-color: var(--color-panel-border);
+}
+
+.cell-city-navbar .navbar-toggler-icon {
+  /* Same 3-line hamburger Bootstrap ships, recolored to --color-text-primary
+     (hardcoded here because CSS variables can't be used inside a data URI). */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23102a43' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.cell-city-navbar .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.cell-city-navbar .navbar-toggler:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   9. BRAND / LOGO
    ======================================== */
 .cell-city-logo {
   width: 28px;
@@ -224,7 +274,81 @@ section {
 }
 
 /* ========================================
-   9. PANELS
+   10. FOOTER
+   ======================================== */
+
+/* Sticky footer: main grows to fill any leftover vertical space so the
+   footer sits at the bottom of short pages instead of floating mid-page.
+   (body already has min-height: 100vh set in RESET & BASE.) */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.cell-city-footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-panel-border);
+  padding: 2rem 1.5rem 1.5rem;
+}
+
+.cell-city-footer__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.cell-city-footer__brand-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cell-city-footer__tagline {
+  margin: 0;
+  color: var(--color-text-secondary);
+  max-width: 32ch;
+}
+
+.cell-city-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.cell-city-footer__link {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.cell-city-footer__link:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.cell-city-footer__bottom {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-panel-border);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.cell-city-footer__bottom p {
+  margin: 0;
+}
+
+/* ========================================
+   11. PANELS
    ======================================== */
 .glass-panel {
   background: var(--color-panel);
@@ -235,7 +359,7 @@ section {
 }
 
 /* ========================================
-   10. ACCESSIBILITY
+   12. ACCESSIBILITY
    ======================================== */
 a:focus-visible,
 .btn-cell-city:focus-visible {
@@ -244,7 +368,7 @@ a:focus-visible,
 }
 
 /* ========================================
-   11. RESPONSIVE FOUNDATION
+   13. RESPONSIVE FOUNDATION
    ======================================== */
 @media (max-width: 600px) {
   h1 {
@@ -252,8 +376,7 @@ a:focus-visible,
   }
 
   header,
-  main,
-  footer {
+  main {
     padding: 1rem;
   }
 }

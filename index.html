@@ -17,7 +17,7 @@
     <script src="js/main.js" defer></script>
   </head>
   <body>
-    <nav class="navbar cell-city-navbar">
+    <nav class="navbar navbar-expand-lg cell-city-navbar">
       <div class="container-fluid cell-city-navbar__container">
         <a
           class="navbar-brand cell-city-navbar__brand"
@@ -41,23 +41,38 @@
           </svg>
           <span class="cell-city-navbar__brand-text">Cell City</span>
         </a>
-        <ul class="navbar-nav cell-city-navbar__nav">
-          <li class="nav-item">
-            <a class="nav-link cell-city-navbar__link" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link cell-city-navbar__link" href="city.html">City</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link cell-city-navbar__link" href="organelles.html">Organelles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link cell-city-navbar__link" href="bio-lab.html">Bio Lab</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link cell-city-navbar__link" href="missions.html">Missions</a>
-          </li>
-        </ul>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#cellCityNavbarCollapse"
+          aria-controls="cellCityNavbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="cellCityNavbarCollapse">
+          <ul class="navbar-nav cell-city-navbar__nav">
+            <li class="nav-item">
+              <a class="nav-link cell-city-navbar__link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cell-city-navbar__link" href="city.html">City</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cell-city-navbar__link" href="organelles.html">Organelles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cell-city-navbar__link" href="bio-lab.html">Bio Lab</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cell-city-navbar__link" href="missions.html">Missions</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
     <main>
@@ -98,11 +113,47 @@
         </p>
       </section>
     </main>
-    <footer>
-      <p>Cell City</p>
+    <footer class="cell-city-footer">
+      <div class="cell-city-footer__content">
+        <div class="cell-city-footer__brand">
+          <p class="cell-city-footer__brand-line">
+            <svg
+              class="cell-city-logo"
+              viewBox="0 0 32 32"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <!-- cell membrane -->
+              <circle cx="16" cy="16" r="14" fill="none" stroke="#009fb0" stroke-width="2" />
+              <!-- nucleus -->
+              <circle cx="16" cy="16" r="6" fill="#0e9f6e" />
+              <!-- organelles -->
+              <circle cx="24" cy="10" r="2" fill="#009fb0" />
+              <circle cx="9" cy="22" r="1.6" fill="#102a43" />
+              <circle cx="23" cy="22" r="1.4" fill="#0e9f6e" />
+            </svg>
+            <span>Cell City</span>
+          </p>
+          <p class="cell-city-footer__tagline">
+            An interactive journey through the biology of the cell.
+          </p>
+        </div>
+
+        <nav class="cell-city-footer__nav" aria-label="Footer navigation">
+          <a class="cell-city-footer__link" href="index.html">Home</a>
+          <a class="cell-city-footer__link" href="city.html">City</a>
+          <a class="cell-city-footer__link" href="organelles.html">Organelles</a>
+          <a class="cell-city-footer__link" href="bio-lab.html">Bio Lab</a>
+          <a class="cell-city-footer__link" href="missions.html">Missions</a>
+        </nav>
+      </div>
+
+      <div class="cell-city-footer__bottom">
+        <p>&copy; 2026 Cell City &middot; Educational project</p>
+      </div>
     </footer>
 
-    <!-- Bootstrap JS bundle (includes Popper) — no components use it yet, wired in for later phases -->
+    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar's collapse/toggler behavior -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer
