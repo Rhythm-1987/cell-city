@@ -156,6 +156,16 @@ section {
   margin-bottom: 2rem;
 }
 
+/* Shared wrapper: container-fluid has no max-width, so on wide screens
+   page content would stretch edge-to-edge. Cap it and center it instead.
+   Used across pages (home, city, ...), so it lives here rather than in a
+   single page's section. */
+.page-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ========================================
    7. NAVBAR
    ======================================== */
@@ -385,14 +395,6 @@ a:focus-visible,
    14. HOME PAGE
    ======================================== */
 
-/* Shared wrapper: container-fluid has no max-width, so on wide screens the
-   hero/cards would stretch edge-to-edge. Cap it and center it instead. */
-.home-container {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 /* --- Hero --- */
 .hero-section {
   padding-top: 2rem;
@@ -431,59 +433,87 @@ a:focus-visible,
 }
 
 .hero-section__media {
+  position: relative;
   display: flex;
   justify-content: center;
 }
 
-.hero-section__image {
-  max-width: 420px;
+/* Soft radial glow behind the hero image so it reads as a "living cell"
+   atmosphere rather than a pasted textbook illustration. */
+.hero-section__atmosphere {
+  position: absolute;
+  inset: -10% -5%;
+  z-index: 0;
+  background: radial-gradient(circle at 40% 35%, rgba(0, 159, 176, 0.16), transparent 60%),
+    radial-gradient(circle at 65% 65%, rgba(14, 159, 110, 0.14), transparent 55%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+/* Empty visual slot reserved for the future hero illustration. Sized to the
+   asset's intended ~4:3 landscape ratio so swapping in the real image later
+   won't reflow the hero. */
+.hero-section__placeholder {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-panel);
-  border: 1px solid var(--color-panel-border);
-  background: #ffffff;
-}
-
-/* --- What is Cell City? --- */
-.intro-section__row {
-  align-items: center;
-  gap: 1.5rem 0;
-}
-
-.intro-section__panel-title {
-  margin: 0 0 1rem;
-  color: var(--color-text-primary);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-
-.intro-section__mapping {
-  margin: 0;
-}
-
-.intro-section__mapping-row {
+  max-width: 420px;
+  aspect-ratio: 4 / 3;
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 0;
-  border-top: 1px solid var(--color-panel-border);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px dashed var(--color-panel-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
 }
 
-.intro-section__mapping-row:first-child {
-  border-top: none;
-}
-
-.intro-section__mapping-row dt {
+.hero-section__placeholder-label {
+  font-weight: 600;
   color: var(--color-text-secondary);
 }
 
-.intro-section__mapping-row dd {
-  margin: 0;
-  color: var(--color-text-primary);
+.hero-section__placeholder-note {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  opacity: 0.75;
+  max-width: 32ch;
+}
+
+/* --- What is Cell City? --- */
+.intro-section__text {
+  max-width: 65ch;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.intro-section__text p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Concept pillars (Explore / Understand / Apply) --- */
+.concept-pillars {
+  margin-top: 2rem;
+  row-gap: 1.5rem;
+  text-align: center;
+}
+
+.concept-pillar__title {
+  color: var(--color-accent);
+  font-size: 0.95rem;
   font-weight: 600;
-  text-align: right;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+
+.concept-pillar__desc {
+  color: var(--color-text-secondary);
+  margin: 0 auto;
 }
 
 /* --- Explore Cell City (feature cards) --- */
@@ -521,7 +551,7 @@ a:focus-visible,
   color: var(--color-accent-secondary);
 }
 
-.feature-card__icon--missions {
+.feature-card__icon--challenges {
   color: var(--color-energy);
 }
 
@@ -538,18 +568,21 @@ a:focus-visible,
   font-weight: 600;
 }
 
-/* --- Call to action --- */
-.cta-section__panel {
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-panel-border);
-  border-radius: var(--radius-md);
-  padding: 2.5rem 1.5rem;
+/* --- Closing statement --- */
+.closing-section {
   text-align: center;
 }
 
-.cta-section__panel p {
-  margin-left: auto;
-  margin-right: auto;
+.closing-section__statement {
+  max-width: 46ch;
+  margin: 0 auto 0.75rem;
+  color: var(--color-text-primary);
+  font-size: 1.15rem;
+  font-style: italic;
+}
+
+.closing-section__link {
+  font-weight: 600;
 }
 
 /* --- Responsive adjustments --- */
@@ -570,23 +603,74 @@ a:focus-visible,
   .hero-section__media {
     margin-top: 1.5rem;
   }
-
-  .intro-section__text {
-    text-align: center;
-  }
-
-  .intro-section__text p {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .intro-section__panel {
-    margin-top: 1.5rem;
-  }
 }
 
 @media (max-width: 600px) {
   .hero-section__heading {
     font-size: 2rem;
   }
+}
+
+/* ========================================
+   15. CITY PAGE
+   ======================================== */
+
+/* --- City intro --- */
+.city-hero__lead {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  max-width: 65ch;
+}
+
+.city-hero__image {
+  max-width: 420px;
+  margin-top: 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  border: 1px solid var(--color-panel-border);
+  background: #ffffff;
+}
+
+/* --- Cell → City guide --- */
+.city-guide-section__lead {
+  color: var(--color-text-secondary);
+  max-width: 65ch;
+}
+
+.city-guide__list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.city-guide__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.city-guide__row dt {
+  color: var(--color-text-secondary);
+}
+
+.city-guide__row dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* --- Challenge entry point --- */
+.city-cta {
+  text-align: center;
+}
+
+.city-cta p {
+  margin-left: auto;
+  margin-right: auto;
 }

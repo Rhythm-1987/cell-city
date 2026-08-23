@@ -27,10 +27,11 @@ markdown_content = """# Cell City Project To-Do List
 - [+] Element 8: Hero heading
 - [+] Element 9: Hero description
 - [+] Element 10: CTA button
-- [+] Element 11: Cell-city preview
-- [ ] Element 12: Organelle cards
-- [ ] Element 13: Central Dogma visualization
-- [+] Element 14: "How Cell City Works" section
+- [ ] Element 11: Cell-city preview (moved to city.html as the Cell → City Guide)
+- [ ] Element 12: Organelle cards (deferred — organelles will be discovered inside the Interactive City, Phase 4, not a standalone page)
+- [ ] Element 13: Central Dogma visualization (deferred to City/Bio Lab, later phase)
+- [+] Element 14: "How Cell City Works" section (now the concise "What is Cell City?" section + three concept pillars)
+- [+] Element 14b: Hero visual placeholder (final illustration pending — see HTML comment in index.html)
 
 ## 🏙️ PHASE 4 — Interactive Cell City
 
@@ -55,6 +56,9 @@ markdown_content = """# Cell City Project To-Do List
 
 ## 🔬 PHASE 5 — ORGANELLE EXPLORER
 
+- Note: no standalone organelles.html page. Organelle info will be
+  data-driven (JSON) and surfaced through click → popup/modal on the
+  City page, not separate HTML pages per organelle.
 - [ ] Element 33: Organelle navigation
 - [ ] Element 34: Organelle cards
 - [ ] Element 35: Detailed information panel
@@ -79,15 +83,15 @@ markdown_content = """# Cell City Project To-Do List
 - [ ] Element 51: Insertion visualization
 - [ ] Element 52: Deletion visualization
 
-## 🎮 PHASE 7 — MISSIONS
+## 🎮 PHASE 7 — CHALLENGES
 
-- [ ] Element 53: Mission cards
+- [ ] Element 53: Challenge cards
 - [ ] Element 54: Question system
 - [ ] Element 55: Answer buttons
 - [ ] Element 56: Score calculation
 - [ ] Element 57: Feedback
 - [ ] Element 58: Progress bar
-- [ ] Element 59: Mission completion
+- [ ] Element 59: Challenge completion
 - [ ] Element 60: localStorage progress
 
 ## ✨ PHASE 8 — POLISH
