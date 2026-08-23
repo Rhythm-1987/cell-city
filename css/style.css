@@ -615,22 +615,6 @@ a:focus-visible,
    15. CITY PAGE
    ======================================== */
 
-/* --- City intro --- */
-.city-hero__lead {
-  color: var(--color-text-secondary);
-  font-size: 1.1rem;
-  max-width: 65ch;
-}
-
-.city-hero__image {
-  max-width: 420px;
-  margin-top: 1rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-panel);
-  border: 1px solid var(--color-panel-border);
-  background: #ffffff;
-}
-
 /* --- Cell → City guide --- */
 .city-guide-section__lead {
   color: var(--color-text-secondary);
@@ -673,4 +657,218 @@ a:focus-visible,
 .city-cta p {
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ========================================
+   PHASE 4 — CELL CITY
+   ======================================== */
+
+/* --- City map section / intro --- */
+.cell-city-map-section {
+  padding-top: 1rem;
+}
+
+.cell-city-map-section__intro {
+  max-width: 70ch;
+}
+
+.cell-city-map-section__lead {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+.cell-city-map-section__instruction {
+  margin: 1rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* --- Status strip --- */
+.cell-city-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.cell-city-status__label {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.cell-city-status__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+}
+
+.cell-city-status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent-secondary);
+}
+
+/* --- Element 15: City container --- */
+/* The dominant, app-like environment the city map lives in. */
+.cell-city-map {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  padding: 1.5rem;
+}
+
+/* --- Element 16: SVG city map viewport --- */
+/* Responsive sizing: the SVG's viewBox handles internal proportions, this
+   wrapper just keeps it centered and prevents horizontal overflow. */
+.cell-city-map__viewport {
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.cell-city-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- Element 17: Cell membrane / border --- */
+.cell-membrane__fill {
+  fill: #ffffff;
+  fill-opacity: 0.92;
+}
+
+.cell-membrane__outer {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 3;
+  stroke-opacity: 0.55;
+}
+
+.cell-membrane__inner {
+  fill: none;
+  stroke: var(--color-accent-secondary);
+  stroke-width: 1;
+  stroke-opacity: 0.3;
+}
+
+/* Very slow, very subtle "breathing" scale on the membrane group. */
+.cell-membrane {
+  transform-origin: 500px 320px;
+  animation: membrane-breathe 9s ease-in-out infinite alternate;
+}
+
+@keyframes membrane-breathe {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.006);
+  }
+}
+
+/* --- Element 18: Cytoplasm environment --- */
+.cytoplasm-blob {
+  filter: url(#softBlur);
+}
+
+.cytoplasm-blob--a {
+  fill: var(--color-accent);
+  fill-opacity: 0.07;
+}
+
+.cytoplasm-blob--b {
+  fill: var(--color-accent-secondary);
+  fill-opacity: 0.06;
+}
+
+.cytoplasm-blob--c {
+  fill: var(--color-accent);
+  fill-opacity: 0.05;
+}
+
+.cytoplasm-particle {
+  fill: var(--color-accent);
+  fill-opacity: 0.3;
+  animation: particle-drift 7s ease-in-out infinite alternate;
+}
+
+.cytoplasm-particle.p2 {
+  animation-delay: -1.5s;
+}
+.cytoplasm-particle.p3 {
+  animation-delay: -3s;
+}
+.cytoplasm-particle.p4 {
+  animation-delay: -4.5s;
+}
+.cytoplasm-particle.p5 {
+  animation-delay: -2s;
+}
+.cytoplasm-particle.p6 {
+  animation-delay: -5s;
+}
+.cytoplasm-particle.p7 {
+  animation-delay: -0.5s;
+}
+
+@keyframes particle-drift {
+  from {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate(6px, -8px);
+    opacity: 1;
+  }
+}
+
+/* --- Element 19: Cytoskeleton roads --- */
+.road {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.road--primary {
+  stroke: var(--color-accent);
+  stroke-opacity: 0.4;
+  stroke-width: 7;
+}
+
+.road--secondary {
+  stroke: var(--color-accent-secondary);
+  stroke-opacity: 0.3;
+  stroke-width: 4;
+}
+
+.road--tertiary {
+  stroke: var(--color-text-secondary);
+  stroke-opacity: 0.25;
+  stroke-width: 2;
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  .cell-membrane,
+  .cytoplasm-particle {
+    animation: none;
+  }
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 600px) {
+  .cell-city-map {
+    padding: 1rem;
+  }
+
+  .cell-city-status {
+    flex-wrap: wrap;
+  }
 }

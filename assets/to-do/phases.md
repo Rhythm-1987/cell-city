@@ -27,19 +27,19 @@ markdown_content = """# Cell City Project To-Do List
 - [+] Element 8: Hero heading
 - [+] Element 9: Hero description
 - [+] Element 10: CTA button
-- [ ] Element 11: Cell-city preview (moved to city.html as the Cell → City Guide)
-- [ ] Element 12: Organelle cards (deferred — organelles will be discovered inside the Interactive City, Phase 4, not a standalone page)
-- [ ] Element 13: Central Dogma visualization (deferred to City/Bio Lab, later phase)
+- [+] Element 11: Cell-city preview (moved to city.html as the Cell → City Guide)
+- [+] Element 12: Organelle cards (deferred — organelles will be discovered inside the Interactive City, Phase 4, not a standalone page)
+- [+] Element 13: Central Dogma visualization (deferred to City/Bio Lab, later phase)
 - [+] Element 14: "How Cell City Works" section (now the concise "What is Cell City?" section + three concept pillars)
 - [+] Element 14b: Hero visual placeholder (final illustration pending — see HTML comment in index.html)
 
 ## 🏙️ PHASE 4 — Interactive Cell City
 
-- [ ] Element 15: City container
-- [ ] Element 16: SVG city map
-- [ ] Element 17: Cell membrane/border
-- [ ] Element 18: Cytoplasm environment
-- [ ] Element 19: Cytoskeleton roads
+- [+] Element 15: City container
+- [+] Element 16: SVG city map
+- [+] Element 17: Cell membrane/border
+- [+] Element 18: Cytoplasm environment
+- [+] Element 19: Cytoskeleton roads
 - [ ] Element 20: Nucleus / City Hall
 - [ ] Element 21: Mitochondria / Power Plant
 - [ ] Element 22: Ribosomes / Protein Factory

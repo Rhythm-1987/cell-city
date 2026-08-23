@@ -73,20 +73,121 @@
       </div>
     </nav>
     <main>
-      <!-- ============ CITY INTRO ============ -->
-      <section class="city-hero">
+      <!-- ============ INTERACTIVE CITY MAP ============ -->
+      <section class="cell-city-map-section">
         <div class="container-fluid page-container">
-          <h1>Explore the City</h1>
-          <p class="city-hero__lead">
-            Cell City represents the cell as a functioning city. Before
-            stepping into the interactive map, get familiar with how each
-            structure maps to a city role.
+          <div class="cell-city-map-section__intro">
+            <h1>Explore the City</h1>
+            <p class="cell-city-map-section__lead">
+              Cell City represents the cell as a functioning city. The map
+              below is the cell itself &mdash; its outer membrane, its
+              cytoplasm, and the cytoskeleton roads that will one day connect
+              every organelle district.
+            </p>
+          </div>
+
+          <div class="cell-city-status">
+            <span class="cell-city-status__label">Cell City</span>
+            <span class="cell-city-status__value">
+              <span class="cell-city-status__dot" aria-hidden="true"></span>
+              Environment ready
+            </span>
+          </div>
+
+          <div class="cell-city-map">
+            <div class="cell-city-map__viewport">
+              <!-- prettier-ignore -->
+              <svg
+                class="cell-city-map__svg"
+                viewBox="0 0 1000 640"
+                role="img"
+                aria-labelledby="cellCityMapTitle cellCityMapDesc"
+              >
+                <title id="cellCityMapTitle">Interactive Cell City map</title>
+                <desc id="cellCityMapDesc">
+                  A stylized map of a cell rendered as a city: an outer cell
+                  membrane boundary, the cytoplasm environment inside it, and
+                  a branching cytoskeleton road network. Future organelle
+                  districts will be added inside this map.
+                </desc>
+
+                <defs>
+                  <!-- Soft radial tint used as the cytoplasm's base color wash -->
+                  <radialGradient id="cytoplasmGlow" cx="50%" cy="42%" r="65%">
+                    <stop offset="0%" stop-color="#009fb0" stop-opacity="0.07" />
+                    <stop offset="55%" stop-color="#0e9f6e" stop-opacity="0.04" />
+                    <stop offset="100%" stop-color="#0e9f6e" stop-opacity="0" />
+                  </radialGradient>
+
+                  <!-- Displaces the membrane ellipse into an irregular, organic outline -->
+                  <filter id="membraneWobble" x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" />
+                  </filter>
+
+                  <!-- Soft blur for cytoplasm blobs and particles -->
+                  <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="20" />
+                  </filter>
+
+                  <!-- Keeps cytoplasm/road content from spilling past the membrane -->
+                  <clipPath id="cellClip">
+                    <ellipse cx="500" cy="320" rx="415" ry="255" />
+                  </clipPath>
+                </defs>
+
+                <!-- ===== ELEMENT 17: CELL MEMBRANE / BORDER ===== -->
+                <g id="cell-membrane" class="cell-membrane" filter="url(#membraneWobble)">
+                  <ellipse class="cell-membrane__fill" cx="500" cy="320" rx="430" ry="270" />
+                  <ellipse class="cell-membrane__outer" cx="500" cy="320" rx="430" ry="270" />
+                  <ellipse class="cell-membrane__inner" cx="500" cy="320" rx="412" ry="253" />
+                </g>
+
+                <!-- ===== ELEMENT 18: CYTOPLASM ENVIRONMENT ===== -->
+                <g id="cytoplasm-environment" clip-path="url(#cellClip)">
+                  <rect class="cytoplasm-base" x="0" y="0" width="1000" height="640" fill="url(#cytoplasmGlow)" />
+
+                  <circle class="cytoplasm-blob cytoplasm-blob--a" cx="330" cy="220" r="120" />
+                  <circle class="cytoplasm-blob cytoplasm-blob--b" cx="680" cy="380" r="150" />
+                  <circle class="cytoplasm-blob cytoplasm-blob--c" cx="520" cy="470" r="100" />
+
+                  <g class="cytoplasm-particles" aria-hidden="true">
+                    <circle class="cytoplasm-particle p1" cx="360" cy="180" r="3.5" />
+                    <circle class="cytoplasm-particle p2" cx="640" cy="160" r="3" />
+                    <circle class="cytoplasm-particle p3" cx="720" cy="330" r="4" />
+                    <circle class="cytoplasm-particle p4" cx="300" cy="420" r="3" />
+                    <circle class="cytoplasm-particle p5" cx="440" cy="500" r="3.5" />
+                    <circle class="cytoplasm-particle p6" cx="780" cy="260" r="2.5" />
+                    <circle class="cytoplasm-particle p7" cx="260" cy="300" r="3" />
+                  </g>
+                </g>
+
+                <!-- ===== ELEMENT 19: CYTOSKELETON ROADS ===== -->
+                <g id="cytoskeleton-roads" clip-path="url(#cellClip)">
+                  <path class="road road--primary" d="M 95,320 C 260,260 380,300 500,320 C 620,340 740,300 905,320" />
+                  <path class="road road--primary" d="M 500,70 C 460,180 480,260 500,320 C 520,400 505,500 500,570" />
+
+                  <path class="road road--secondary" d="M 180,140 C 260,200 340,260 460,300" />
+                  <path class="road road--secondary" d="M 820,150 C 720,210 620,260 520,300" />
+                  <path class="road road--secondary" d="M 170,520 C 260,460 360,400 470,340" />
+                  <path class="road road--secondary" d="M 830,500 C 730,450 630,400 530,340" />
+
+                  <path class="road road--tertiary" d="M 500,320 C 560,280 620,260 660,220" />
+                  <path class="road road--tertiary" d="M 500,320 C 440,360 380,400 340,440" />
+                </g>
+
+                <!-- Future organelle buildings (Element 20+) will be inserted here as their own <g> groups -->
+                <g id="organelle-layer"></g>
+
+                <!-- Future transport vehicles / energy-flow animation will be inserted here -->
+                <g id="transport-layer"></g>
+              </svg>
+            </div>
+          </div>
+
+          <p class="cell-city-map-section__instruction">
+            Explore the cell city. Click a district to learn more.
           </p>
-          <img
-            class="city-hero__image"
-            src="assets/images/Cutaway-drawing-cell.webp"
-            alt="Cutaway illustration of an animal cell showing the nucleus, mitochondria, and other organelles"
-          />
         </div>
       </section>
 
