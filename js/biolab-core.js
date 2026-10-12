@@ -106,6 +106,7 @@
     let endedAtStop = false;
     while (i + 3 <= rna.length) {
       const entry = table[rna.substr(i, 3)];
+      if (!entry) throw new Error(`"${rna.substr(i, 3)}" is not an RNA codon; validate the sequence before translating.`);
       codons.push(entry);
       i += 3;
       if (entry.isStop && stopAtStop) {
@@ -131,24 +132,27 @@
    *   insertion:    insert `base` immediately BEFORE `position` (1..length+1;
    *                 length+1 appends after the last base)
    *   deletion:     remove the base at `position` (1..length)
-   * Returns { ok:false, error } or { ok:true, original, mutated, columns, description }.
+   * Returns { ok:false, error, field } or { ok:true, original, mutated, columns, description, effect }.
+   * `field` ("sequence" | "position" | "base" | "type") names the input at fault.
    * `columns` aligns the two sequences for display: each has
    * { original, mutated, state, index } where state is
    * "same" | "changed" | "inserted" | "deleted" and the missing side is null.
    */
   function mutate(seq, { type, position, base }) {
     const n = seq.length;
+    const fail = (field, error) => ({ ok: false, field, error });
     if (n > MAX_MUTATION_LENGTH) {
-      return { ok: false, error: `The visualiser handles up to ${MAX_MUTATION_LENGTH} bases; your sequence has ${n}.` };
+      return fail("sequence", `The visualiser handles up to ${MAX_MUTATION_LENGTH} bases; your sequence has ${n}.`);
     }
-    if (!Number.isInteger(position)) return { ok: false, error: "Enter a whole number for the position." };
+    if (!["substitution", "insertion", "deletion"].includes(type)) return fail("type", "Choose a mutation type.");
+    if (!Number.isInteger(position)) return fail("position", "Enter a whole number for the position.");
 
     const maxPosition = type === "insertion" ? n + 1 : n;
     if (position < 1 || position > maxPosition) {
-      return { ok: false, error: `Position must be between 1 and ${maxPosition} for ${type} on this sequence.` };
+      return fail("position", `Position must be between 1 and ${maxPosition} for ${type} on this sequence.`);
     }
-    if (type !== "deletion" && !DNA_BASES.includes(base || "?")) {
-      return { ok: false, error: "Choose a new base: A, C, G or T." };
+    if (type !== "deletion" && !(typeof base === "string" && base.length === 1 && DNA_BASES.includes(base))) {
+      return fail("base", "Choose a new base: A, C, G or T.");
     }
 
     const same = (i) => ({ original: seq[i], mutated: seq[i], state: "same", index: i + 1 });
@@ -179,14 +183,12 @@
         position === n + 1
           ? `Insertion: ${base} added after the last base, as new position ${position}.`
           : `Insertion: ${base} placed immediately before original position ${position}. It becomes position ${position} of the new sequence, and the original base ${position} (${seq[position - 1]}) moves to position ${position + 1}.`;
-    } else if (type === "deletion") {
+    } else {
       for (let i = 0; i < n; i++) {
         columns.push(i === position - 1 ? { original: seq[i], mutated: null, state: "deleted", index: i + 1 } : same(i));
       }
       mutated = seq.slice(0, position - 1) + seq.slice(position);
       description = `Deletion: ${seq[position - 1]} removed from position ${position}. Every later base moves up by one position.`;
-    } else {
-      return { ok: false, error: "Choose a mutation type." };
     }
 
     return { ok: true, original: seq, mutated, columns, description, effect: describeEffect(seq, mutated, type, position) };
@@ -216,7 +218,9 @@
         result.text = "The changed base is in an incomplete trailing codon, which is not translated in frame 1.";
       } else if (was.letter === now.letter) {
         result.kind = "silent";
-        result.text = `Silent: codon ${codonIndex + 1} changes (${was.codon} → ${now.codon}) but still codes for ${was.name}.`;
+        result.text = was.isStop
+          ? `Silent: codon ${codonIndex + 1} changes (${was.codon} → ${now.codon}) but is still a stop codon.`
+          : `Silent: codon ${codonIndex + 1} changes (${was.codon} → ${now.codon}) but still codes for ${was.name}.`;
       } else if (now.isStop) {
         result.kind = "nonsense";
         result.text = `Nonsense-type change: codon ${codonIndex + 1} (${was.codon} → ${now.codon}) becomes a stop codon.`;
@@ -228,11 +232,32 @@
         result.text = `Missense-type change: codon ${codonIndex + 1} (${was.codon} → ${now.codon}) changes ${was.name} to ${now.name}.`;
       }
     } else {
-      result.kind = "frameshift";
+      // One base is never a multiple of three, so in a coding region this edit can shift the frame.
+      // Whether it does in a real gene depends on where the gene starts and ends.
+      result.kind = "indel";
       result.text =
-        `A single-base ${type} shifts the reading frame of every codon after this point, so the codons downstream are read differently.`;
+        `A single-base ${type} changes the length by 1, which is not a multiple of three. ` +
+        "If this sequence were coding, the reading frame of every codon after this point could shift (a frameshift), " +
+        "so the codons downstream would be read differently. An insertion or deletion whose length is a multiple of three keeps the frame.";
     }
     return result;
+  }
+
+  // ---- codon search -------------------------------------------------------------
+
+  /**
+   * Does a genetic-code entry match a search query?
+   * Matches (case-insensitive): the start of a codon (T accepted for U), the one-letter symbol,
+   * the three-letter code, "stop" or "*", or the start of any word of the amino-acid name.
+   * A single base letter (A, C, G, T) is both a codon prefix and an amino-acid symbol, so it matches either.
+   */
+  function matchCodon(entry, rawQuery) {
+    const query = String(rawQuery || "").trim().toLowerCase();
+    if (!query) return true;
+    if (query.length <= 3 && /^[acgtu]+$/.test(query) && entry.codon.startsWith(query.toUpperCase().replaceAll("T", "U"))) return true;
+    if (query === "stop") return entry.isStop;
+    if (query.length === 1) return entry.letter.toLowerCase() === query;
+    return entry.three.toLowerCase() === query || entry.name.toLowerCase().split(" ").some((word) => word.startsWith(query));
   }
 
   CC.bio = {
@@ -246,5 +271,6 @@
     transcribe,
     translate,
     mutate,
+    matchCodon,
   };
 })();

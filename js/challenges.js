@@ -25,15 +25,16 @@
   // Shape: { [categoryId]: { best, total, last, attempts, completedAt } }
   // Anything missing, corrupt or out of date (question count changed) is dropped.
 
+  const isScore = (value, total) => Number.isInteger(value) && value >= 0 && value <= total;
+
   function isValidEntry(entry, category) {
     const total = category.questions.length;
     return (
       entry &&
       typeof entry === "object" &&
       entry.total === total &&
-      Number.isInteger(entry.best) &&
-      entry.best >= 0 &&
-      entry.best <= total &&
+      isScore(entry.best, total) &&
+      isScore(entry.last, total) &&
       Number.isInteger(entry.attempts) &&
       entry.attempts >= 1
     );
@@ -63,7 +64,9 @@
     }
   }
 
+  /** Stores a finished attempt. Returns false (and stores nothing) for an impossible score or blocked storage. */
   function saveResult(category, score) {
+    if (!isScore(score, category.questions.length)) return false;
     const progress = readProgress();
     const previous = progress[category.id];
     progress[category.id] = {
@@ -211,7 +214,7 @@
         if (event.target.closest("[data-exit]")) show(listView());
         const option = event.target.closest("[data-option]");
         if (option && !state.answered) answer(Number(option.dataset.option), node, feedback, next, progress, progressBar);
-        if (event.target === next) advance();
+        if (event.target.closest(".quiz__next")) advance();
       });
       return { node, focusTarget: prompt };
     }
@@ -249,6 +252,7 @@
     }
 
     function advance() {
+      if (!state.answered) return; // repeated activations of "Next" must not skip a question
       state.answered = false;
       state.index++;
       if (state.index < state.cat.questions.length) show(questionView());

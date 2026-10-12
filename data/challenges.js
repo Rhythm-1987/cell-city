@@ -225,7 +225,7 @@ window.CellCity.data.challenges = {
           ],
           answer: 1,
           explanation:
-            "Because codons are read in groups of three, deleting one base shifts the reading frame (a frameshift) for everything downstream.",
+            "Codons are read in groups of three, and one base is not a multiple of three, so deleting it usually shifts the reading frame (a frameshift) for the codons that follow. Deleting three bases at once would keep the frame.",
         },
         {
           id: "bio-4",

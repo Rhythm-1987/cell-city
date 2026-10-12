@@ -14,22 +14,23 @@
   const EXAMPLE_DNA = "ATGGCCATTGTAATGGGCCGCTGA"; // Met-Ala-Ile-Val-Met-Gly-Arg-Stop
   const EXAMPLE_RNA = "AUGGCCAUUGUAAUGGGCCGCUGA";
   const SEQUENCE_COLOUR_LIMIT = 1000; // beyond this, plain text keeps the page fast
-  const MUTATION_BLOCK_SIZE = 15; // columns per row of the before/after view
 
   const $ = (id) => document.getElementById(id);
 
   // ---- shared helpers ------------------------------------------------------------
 
-  function showError(input, errorEl, message) {
+  /** Shows `message` in `errorEl` and marks `input` invalid. Any other field in `related` is un-marked. */
+  function showError(input, errorEl, message, related = []) {
+    clearError(related, errorEl);
     errorEl.textContent = message;
     errorEl.hidden = false;
     input.setAttribute("aria-invalid", "true");
   }
 
-  function clearError(input, errorEl) {
+  function clearError(inputs, errorEl) {
     errorEl.textContent = "";
     errorEl.hidden = true;
-    input.removeAttribute("aria-invalid");
+    [].concat(inputs).forEach((input) => input.removeAttribute("aria-invalid"));
   }
 
   function setResults(container, ...nodes) {
@@ -314,22 +315,10 @@
       body.append(row);
     });
 
-    // Codon prefixes accept T as well as U; amino acids match by name, 3-letter or 1-letter code.
-    function matches(entry, query) {
-      if (!query) return true;
-      const rnaQuery = query.toUpperCase().replaceAll("T", "U");
-      if (query.length <= 3 && /^[ACGTU]+$/i.test(query) && entry.codon.startsWith(rnaQuery)) return true;
-      if (query === "stop") return entry.isStop;
-      if (query.length === 1) return entry.letter.toLowerCase() === query;
-      // Any word of the name may start with the query ("acid" finds both aspartic and glutamic acid).
-      return entry.three.toLowerCase() === query || entry.name.toLowerCase().split(" ").some((word) => word.startsWith(query));
-    }
-
     function applyFilter() {
-      const query = search.value.trim().toLowerCase();
       let shown = 0;
       code.codons.forEach((entry) => {
-        const visible = matches(entry, query);
+        const visible = bio.matchCodon(entry, search.value);
         rows.get(entry.codon).hidden = !visible;
         if (visible) shown++;
       });
@@ -374,22 +363,21 @@
       return h("span", { class: "mut-cell" + (state ? ` ${state}` : ""), text });
     }
 
+    // One three-cell column (index, original, mutated) per base; columns wrap to the available width.
     function renderColumns(columns) {
-      const blocks = h("div", { class: "mut-blocks", "aria-hidden": "true" });
-      for (let start = 0; start < columns.length; start += MUTATION_BLOCK_SIZE) {
-        const block = h("div", { class: "mut-block" });
-        columns.slice(start, start + MUTATION_BLOCK_SIZE).forEach((col) => {
+      return h(
+        "div",
+        { class: "mut-blocks", "aria-hidden": "true" },
+        columns.map((col) => {
           const showIndex = col.state !== "same" || col.index % 5 === 0;
           const label = col.index === null ? "+" : showIndex ? String(col.index) : "";
           const original =
             col.state === "deleted" ? cell(col.original, "is-deleted") : col.state === "changed" ? cell(col.original, "is-changed") : col.original === null ? cell("–", "is-gap") : cell(col.original);
           const mutated =
             col.state === "inserted" ? cell(col.mutated, "is-inserted") : col.state === "changed" ? cell(col.mutated, "is-changed") : col.mutated === null ? cell("–", "is-gap") : cell(col.mutated);
-          block.append(h("span", { class: "mut-cell mut-cell--index", text: label }), original, mutated);
-        });
-        blocks.append(block);
-      }
-      return blocks;
+          return h("span", { class: "mut-col" }, h("span", { class: "mut-cell mut-cell--index", text: label }), original, mutated);
+        })
+      );
     }
 
     function legend() {
@@ -408,8 +396,9 @@
       event.preventDefault();
       const seq = bio.normalise(input.value);
       const check = bio.validate(seq, "DNA");
+      const fields = [input, position];
       if (!check.ok) {
-        showError(input, error, check.error);
+        showError(input, error, check.error, fields);
         setResults(results, emptyMessage("No results: fix the sequence and apply the mutation again."));
         return;
       }
@@ -420,11 +409,11 @@
         base: base.value,
       });
       if (!outcome.ok) {
-        showError(input, error, outcome.error);
+        showError(outcome.field === "position" ? position : outcome.field === "base" ? base : input, error, outcome.error, fields);
         setResults(results, emptyMessage("No results: fix the problem above and try again."));
         return;
       }
-      clearError(input, error);
+      clearError(fields, error);
 
       const effect = outcome.effect;
       setResults(
@@ -464,7 +453,7 @@
       reset: () => {
         input.value = "";
         position.value = "4";
-        clearError(input, error);
+        clearError([input, position], error);
         updateHint();
         setResults(results, emptyMessage(emptyText));
         input.focus();
@@ -479,7 +468,7 @@
   const translateRna = initTranslation();
   initTranscription((mrna) => {
     translateRna(mrna);
-    bootstrap.Tab.getOrCreateInstance($("tab-translate")).show();
+    if (window.bootstrap) bootstrap.Tab.getOrCreateInstance($("tab-translate")).show();
   });
   initCodonExplorer();
   initMutations();

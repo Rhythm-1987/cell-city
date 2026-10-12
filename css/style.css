@@ -160,16 +160,6 @@ a:hover {
   cursor: not-allowed;
 }
 
-.btn-cell-city-secondary {
-  border-color: var(--color-green-strong);
-  color: var(--color-green-strong);
-}
-
-.btn-cell-city-secondary:hover {
-  background-color: var(--color-green-strong);
-  color: #ffffff;
-}
-
 /* Primary action: filled, with a hard pixel-style shadow that "presses in". */
 .btn-cell-city--primary {
   background-color: var(--color-accent-strong);
@@ -513,6 +503,7 @@ summary:focus-visible,
 .hero-section__media {
   position: relative;
   display: flex;
+  align-self: center;
   justify-content: center;
 }
 
@@ -558,16 +549,16 @@ summary:focus-visible,
 .feature-card {
   height: 100%;
   background: #ffffff;
-  border: 1px solid var(--color-panel-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-panel);
+  border: 2px solid var(--color-text-primary);
+  border-radius: 0;
+  box-shadow: var(--pixel-shadow);
   padding: 1.75rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 34px rgba(16, 42, 67, 0.12);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-panel-border);
 }
 
 .feature-card__title {
@@ -680,10 +671,6 @@ summary:focus-visible,
 /* ========================================
    16. HOME — HERO SCENE & FEATURE CARDS
    ======================================== */
-.hero-section__media {
-  align-self: center;
-}
-
 .hero-section__scene-frame {
   width: 100%;
   max-width: 560px;
@@ -724,17 +711,6 @@ summary:focus-visible,
   background: var(--color-energy);
 }
 
-.feature-card {
-  border: 2px solid var(--color-text-primary);
-  border-radius: 0;
-  box-shadow: var(--pixel-shadow);
-}
-
-.feature-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--color-panel-border);
-}
-
 .feature-card__sprite {
   display: grid;
   place-items: start;
@@ -765,7 +741,8 @@ summary:focus-visible,
   margin: 0.5rem 0 1.25rem;
 }
 
-/* Map beside the structure directory; stacks on tablets and phones. */
+/* Map beside the structure directory; stacks below 1200px so the map stays wide enough to read
+   (see the 860px label rule in RESPONSIVE). */
 .city-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -1684,15 +1661,15 @@ summary:focus-visible,
   gap: 0.4rem;
 }
 
+/* One column per base (index, original, mutated); columns wrap to whatever width is available. */
 .mut-blocks {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 0.75rem;
+  gap: 1rem 2px;
 }
 
-.mut-block {
+.mut-col {
   display: grid;
-  grid-auto-flow: column;
   grid-template-rows: auto auto auto;
   gap: 2px;
 }
@@ -2060,7 +2037,7 @@ summary:focus-visible,
 /* ========================================
    21. RESPONSIVE
    ======================================== */
-@media (max-width: 991.98px) {
+@media (max-width: 1199.98px) {
   .city-layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -2070,9 +2047,19 @@ summary:focus-visible,
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     max-height: none;
   }
+}
 
+@media (max-width: 991.98px) {
   .hero-section__scene-frame {
     margin: 0 auto;
+  }
+}
+
+/* Map text is sized in map units, so it shrinks with the map. Below this width it would render under
+   ~10px; the directory (and every structure's accessible name) still names each structure. */
+@media (max-width: 859.98px) {
+  .map-label {
+    display: none;
   }
 }
 
@@ -2095,11 +2082,6 @@ summary:focus-visible,
 }
 
 @media (max-width: 575.98px) {
-  /* Map text would shrink below readable size; the directory names every structure. */
-  .map-label {
-    display: none;
-  }
-
   .organelle-modal__sprite {
     width: 72px;
     height: 60px;

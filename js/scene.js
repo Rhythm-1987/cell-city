@@ -131,7 +131,7 @@
 
   // ---- layers -------------------------------------------------------------------
 
-  function buildCytoplasm() {
+  function buildCytoplasm(interactive) {
     const speckA = new Set();
     const speckB = new Set();
     for (let ty = 0; ty < 80; ty++) {
@@ -149,11 +149,11 @@
       svgEl("ellipse", { class: "cytoplasm-fill", cx: CELL.cx, cy: CELL.cy, rx: CELL.rx - 8, ry: CELL.ry - 8 }),
       tilePath("cytoplasm-speck cytoplasm-speck--a", speckA),
       tilePath("cytoplasm-speck cytoplasm-speck--b", speckB),
-      svgEl("ellipse", { class: "focus-frame", cx: CELL.cx, cy: CELL.cy, rx: CELL.rx - 44, ry: CELL.ry - 44 })
+      interactive && svgEl("ellipse", { class: "focus-frame", cx: CELL.cx, cy: CELL.cy, rx: CELL.rx - 44, ry: CELL.ry - 44 })
     );
   }
 
-  function buildMembrane() {
+  function buildMembrane(interactive) {
     const outerA = new Set();
     const outerB = new Set();
     const tails = new Set();
@@ -190,7 +190,7 @@
       tilePath("membrane-head membrane-head--b", innerB),
       tilePath("membrane-protein", proteins),
       tilePath("membrane-pore", pores),
-      svgEl("ellipse", { class: "focus-frame", cx: CELL.cx, cy: CELL.cy, rx: CELL.rx + 12, ry: CELL.ry + 12 })
+      interactive && svgEl("ellipse", { class: "focus-frame", cx: CELL.cx, cy: CELL.cy, rx: CELL.rx + 12, ry: CELL.ry + 12 })
     );
   }
 
@@ -250,20 +250,27 @@
     );
   }
 
-  function buildBuilding(placement, index, organelles, showLabels) {
+  function buildBuilding(placement, index, organelles, { showLabels, interactive }) {
     const { w, h } = CC.pixel.size(placement.sprite);
     const width = w * placement.scale;
     const height = h * placement.scale;
     const info = organelles.items[placement.id];
-    const instanceNumber = PLACEMENTS.filter((p, i) => p.id === placement.id && i <= index).length;
+    const instances = PLACEMENTS.filter((p) => p.id === placement.id);
+    const instanceNumber = PLACEMENTS.slice(0, index + 1).filter((p) => p.id === placement.id).length;
     const pad = 8;
 
     const g = svgEl(
       "g",
-      { id: `organelle-${placement.id}-${instanceNumber}`, class: `organelle-building organelle-building--${placement.id}`, "data-organelle": placement.id },
-      svgEl("rect", { class: "focus-frame", x: placement.x - pad, y: placement.y - pad, width: width + pad * 2, height: height + pad * 2 }),
+      {
+        id: `organelle-${placement.id}-${instanceNumber}`,
+        class: `organelle-building organelle-building--${placement.id}`,
+        "data-organelle": placement.id,
+        // Repeated structures (two mitochondria, two lysosomes) get distinct accessible names.
+        "data-instance": interactive && instances.length > 1 ? `${instanceNumber} of ${instances.length}` : null,
+      },
+      interactive && svgEl("rect", { class: "focus-frame", x: placement.x - pad, y: placement.y - pad, width: width + pad * 2, height: height + pad * 2 }),
       CC.pixel.group(placement.sprite, { x: placement.x, y: placement.y, scale: placement.scale }),
-      svgEl("rect", { class: "hit-area", x: placement.x - pad, y: placement.y - pad, width: width + pad * 2, height: height + pad * 2 })
+      interactive && svgEl("rect", { class: "hit-area", x: placement.x - pad, y: placement.y - pad, width: width + pad * 2, height: height + pad * 2 })
     );
     if (showLabels && placement.label) {
       const centre = placement.x + width / 2;
@@ -291,10 +298,11 @@
   }
 
   function describe(g, info) {
+    const name = g.dataset.instance ? `${info.name} (${g.dataset.instance})` : info.name;
     g.setAttribute("tabindex", "0");
     g.setAttribute("role", "button");
-    g.setAttribute("aria-label", `${info.name}, ${info.cityRole}. Open information.`);
-    g.prepend(svgEl("title", {}, `${info.name} — ${info.cityRole}`));
+    g.setAttribute("aria-label", `${name}, ${info.cityRole}. Open information.`);
+    g.prepend(svgEl("title", {}, `${name} — ${info.cityRole}`));
   }
 
   // ---- transport animation ------------------------------------------------------
@@ -320,7 +328,8 @@
   const snap = (v) => Math.round(v / PIXEL_SNAP) * PIXEL_SNAP;
 
   function buildTransport() {
-    const layer = svgEl("g", { id: "transport-layer", "aria-hidden": "true" });
+    // Moving sprites are decorative: clicks must fall through to the road or cytoplasm underneath.
+    const layer = svgEl("g", { id: "transport-layer", "aria-hidden": "true", "pointer-events": "none" });
     const vesicleSize = CC.pixel.size("vesicle");
     const atpSize = CC.pixel.size("atp");
     const vesicleScale = 3;
@@ -385,20 +394,21 @@
    */
   function build(svg, { interactive = false, labels = true, onSelect } = {}) {
     const organelles = CC.data.organelles;
-    svg.replaceChildren();
+    // Keep the <svg>'s own <title>/<desc>: its aria-labelledby points at them.
+    svg.replaceChildren(...[...svg.children].filter((el) => el.tagName === "title" || el.tagName === "desc"));
 
     const buildings = svgEl("g", { id: "organelle-layer" });
-    PLACEMENTS.forEach((p, i) => buildings.append(buildBuilding(p, i, organelles, labels)));
+    PLACEMENTS.forEach((p, i) => buildings.append(buildBuilding(p, i, organelles, { showLabels: labels, interactive })));
     const transport = buildTransport();
 
-    const cytoplasm = buildCytoplasm();
-    const membrane = buildMembrane();
+    const cytoplasm = buildCytoplasm(interactive);
+    const membrane = buildMembrane(interactive);
     const roads = buildRoads();
     const envItems = [cytoplasm, membrane, roads];
 
-    svg.append(cytoplasm, membrane, roads, buildings);
+    // Transport sprites run under the buildings and their labels, so moving pixels never cross map text.
+    svg.append(cytoplasm, membrane, roads, transport.layer, buildings);
     if (labels) svg.append(...buildEnvLabels(organelles));
-    svg.append(transport.layer);
     svg.setAttribute("shape-rendering", "crispEdges");
 
     if (interactive) {

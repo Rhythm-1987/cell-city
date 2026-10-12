@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cell City — Bio Lab</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <meta name="description" content="Analyse DNA, transcribe and translate sequences, explore the genetic code and visualise mutations." />
 
     <!-- Bootstrap (structural components only — Cell City look comes from style.css below) -->
@@ -23,7 +24,7 @@
     <script src="js/biolab.js" defer></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg cell-city-navbar">
+    <nav class="navbar navbar-expand-lg cell-city-navbar" aria-label="Primary">
       <div class="container-fluid cell-city-navbar__container">
         <a
           class="navbar-brand cell-city-navbar__brand"
@@ -218,7 +219,7 @@
                     </div>
                     <div class="lab-note">
                       <p><strong>Convention.</strong> Bases are counted from 1 at the 5&prime; end. Frame 1 reads codons starting at base 1, frame 2 at base 2 and frame 3 at base 3. Only the forward strand is read.</p>
-                      <p>Stop codons are shown as &ldquo;Stop&rdquo; and written * in the protein. Leftover bases at the end that do not form a full codon are not translated.</p>
+                      <p>Stop codons are shown as &ldquo;Stop&rdquo; and written * in the protein. With &ldquo;End at the first stop codon&rdquo; unticked, translation continues past stop codons so you can see every codon in the frame. Leftover bases at the end that do not form a full codon are not translated.</p>
                     </div>
                     <div class="lab-actions">
                       <button type="submit" class="btn-cell-city btn-cell-city--primary">Translate</button>
@@ -314,11 +315,11 @@
                       <div class="lab-field-row">
                         <div class="lab-field">
                           <label class="lab-label" for="mutate-position">Position</label>
-                          <input class="lab-input" id="mutate-position" type="number" min="1" step="1" value="4" inputmode="numeric" aria-describedby="mutate-position-hint" />
+                          <input class="lab-input" id="mutate-position" type="number" min="1" step="1" value="4" inputmode="numeric" aria-describedby="mutate-position-hint mutate-error" />
                         </div>
                         <div class="lab-field" id="mutate-base-field">
                           <label class="lab-label" for="mutate-base">New base</label>
-                          <select class="lab-select" id="mutate-base">
+                          <select class="lab-select" id="mutate-base" aria-describedby="mutate-error">
                             <option>A</option>
                             <option>C</option>
                             <option>G</option>

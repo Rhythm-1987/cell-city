@@ -144,6 +144,7 @@
   }
 
   function openOrganelle(id, trigger) {
+    if (!window.bootstrap) return; // main.js shows a notice when the CDN script is missing
     lastTrigger = trigger || document.activeElement;
     showOrganelle(id, "summary");
     bootstrap.Modal.getOrCreateInstance(modalEl).show();
@@ -232,6 +233,7 @@
   let challengeTrigger = null;
   document.querySelectorAll(".js-open-challenge").forEach((button) => {
     button.addEventListener("click", () => {
+      if (!window.bootstrap) return;
       CC.challenges.mount(challengeApp, { headingLevel: 3 });
       challengeTrigger = button;
       bootstrap.Modal.getOrCreateInstance(challengeModalEl).show();
