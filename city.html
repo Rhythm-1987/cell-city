@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cell-City: CITY</title>
+    <title>Cell City — Explore the City</title>
+    <meta name="description" content="Explore an interactive pixel-art cell drawn as a city and learn what each organelle does." />
 
     <!-- Bootstrap (structural components only — Cell City look comes from style.css below) -->
     <link
@@ -15,6 +16,13 @@
     <link rel="stylesheet" href="css/style.css" />
 
     <script src="js/main.js" defer></script>
+    <script src="data/sprites.js" defer></script>
+    <script src="data/organelles.js" defer></script>
+    <script src="data/challenges.js" defer></script>
+    <script src="js/pixel.js" defer></script>
+    <script src="js/scene.js" defer></script>
+    <script src="js/challenges.js" defer></script>
+    <script src="js/city.js" defer></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg cell-city-navbar">
@@ -79,176 +87,78 @@
           <div class="cell-city-map-section__intro">
             <h1>Explore the City</h1>
             <p class="cell-city-map-section__lead">
-              Cell City represents the cell as a functioning city. The map
-              below is the cell itself &mdash; its outer membrane, its
-              cytoplasm, and the cytoskeleton roads that will one day connect
-              every organelle district.
+              The map is a cell drawn as a city. Select any building, road or
+              the boundary itself to see what it does, then open
+              <strong>Learn More</strong> for the full biology.
             </p>
           </div>
 
-          <div class="cell-city-status">
-            <span class="cell-city-status__label">Cell City</span>
-            <span class="cell-city-status__value">
-              <span class="cell-city-status__dot" aria-hidden="true"></span>
-              Environment ready
-            </span>
+          <div class="city-toolbar">
+            <button type="button" class="btn-cell-city btn-cell-city--primary js-open-challenge">
+              Take a Challenge
+            </button>
+            <button type="button" class="btn-cell-city" id="motionToggle">Pause animation</button>
           </div>
 
-          <div class="cell-city-map">
-            <div class="cell-city-map__viewport">
-              <!-- prettier-ignore -->
-              <svg
-                class="cell-city-map__svg"
-                viewBox="0 0 1000 640"
-                role="img"
-                aria-labelledby="cellCityMapTitle cellCityMapDesc"
-              >
-                <title id="cellCityMapTitle">Interactive Cell City map</title>
-                <desc id="cellCityMapDesc">
-                  A stylized map of a cell rendered as a city: an outer cell
-                  membrane boundary, the cytoplasm environment inside it, and
-                  a branching cytoskeleton road network. Future organelle
-                  districts will be added inside this map.
-                </desc>
-
-                <defs>
-                  <!-- Soft radial tint used as the cytoplasm's base color wash -->
-                  <radialGradient id="cytoplasmGlow" cx="50%" cy="42%" r="65%">
-                    <stop offset="0%" stop-color="#009fb0" stop-opacity="0.07" />
-                    <stop offset="55%" stop-color="#0e9f6e" stop-opacity="0.04" />
-                    <stop offset="100%" stop-color="#0e9f6e" stop-opacity="0" />
-                  </radialGradient>
-
-                  <!-- Displaces the membrane ellipse into an irregular, organic outline -->
-                  <filter id="membraneWobble" x="-20%" y="-20%" width="140%" height="140%">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="noise" />
-                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" />
-                  </filter>
-
-                  <!-- Soft blur for cytoplasm blobs and particles -->
-                  <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
-                    <feGaussianBlur stdDeviation="20" />
-                  </filter>
-
-                  <!-- Keeps cytoplasm/road content from spilling past the membrane -->
-                  <clipPath id="cellClip">
-                    <ellipse cx="500" cy="320" rx="415" ry="255" />
-                  </clipPath>
-                </defs>
-
-                <!-- ===== ELEMENT 17: CELL MEMBRANE / BORDER ===== -->
-                <g id="cell-membrane" class="cell-membrane" filter="url(#membraneWobble)">
-                  <ellipse class="cell-membrane__fill" cx="500" cy="320" rx="430" ry="270" />
-                  <ellipse class="cell-membrane__outer" cx="500" cy="320" rx="430" ry="270" />
-                  <ellipse class="cell-membrane__inner" cx="500" cy="320" rx="412" ry="253" />
-                </g>
-
-                <!-- ===== ELEMENT 18: CYTOPLASM ENVIRONMENT ===== -->
-                <g id="cytoplasm-environment" clip-path="url(#cellClip)">
-                  <rect class="cytoplasm-base" x="0" y="0" width="1000" height="640" fill="url(#cytoplasmGlow)" />
-
-                  <circle class="cytoplasm-blob cytoplasm-blob--a" cx="330" cy="220" r="120" />
-                  <circle class="cytoplasm-blob cytoplasm-blob--b" cx="680" cy="380" r="150" />
-                  <circle class="cytoplasm-blob cytoplasm-blob--c" cx="520" cy="470" r="100" />
-
-                  <g class="cytoplasm-particles" aria-hidden="true">
-                    <circle class="cytoplasm-particle p1" cx="360" cy="180" r="3.5" />
-                    <circle class="cytoplasm-particle p2" cx="640" cy="160" r="3" />
-                    <circle class="cytoplasm-particle p3" cx="720" cy="330" r="4" />
-                    <circle class="cytoplasm-particle p4" cx="300" cy="420" r="3" />
-                    <circle class="cytoplasm-particle p5" cx="440" cy="500" r="3.5" />
-                    <circle class="cytoplasm-particle p6" cx="780" cy="260" r="2.5" />
-                    <circle class="cytoplasm-particle p7" cx="260" cy="300" r="3" />
-                  </g>
-                </g>
-
-                <!-- ===== ELEMENT 19: CYTOSKELETON ROADS ===== -->
-                <g id="cytoskeleton-roads" clip-path="url(#cellClip)">
-                  <path class="road road--primary" d="M 95,320 C 260,260 380,300 500,320 C 620,340 740,300 905,320" />
-                  <path class="road road--primary" d="M 500,70 C 460,180 480,260 500,320 C 520,400 505,500 500,570" />
-
-                  <path class="road road--secondary" d="M 180,140 C 260,200 340,260 460,300" />
-                  <path class="road road--secondary" d="M 820,150 C 720,210 620,260 520,300" />
-                  <path class="road road--secondary" d="M 170,520 C 260,460 360,400 470,340" />
-                  <path class="road road--secondary" d="M 830,500 C 730,450 630,400 530,340" />
-
-                  <path class="road road--tertiary" d="M 500,320 C 560,280 620,260 660,220" />
-                  <path class="road road--tertiary" d="M 500,320 C 440,360 380,400 340,440" />
-                </g>
-
-                <!-- Future organelle buildings (Element 20+) will be inserted here as their own <g> groups -->
-                <g id="organelle-layer"></g>
-
-                <!-- Future transport vehicles / energy-flow animation will be inserted here -->
-                <g id="transport-layer"></g>
-              </svg>
+          <div class="city-layout">
+            <div class="cell-city-map pixel-frame">
+              <div class="cell-city-map__viewport">
+                <!-- Scene is drawn by js/scene.js (membrane, cytoplasm, roads, buildings, transport). -->
+                <svg
+                  id="cellCityMapSvg"
+                  class="cell-city-map__svg"
+                  viewBox="0 0 1000 640"
+                  role="group"
+                  aria-labelledby="cellCityMapTitle cellCityMapDesc"
+                >
+                  <title id="cellCityMapTitle">Interactive Cell City map</title>
+                  <desc id="cellCityMapDesc">
+                    A pixel-art cell drawn as a city. Each building, the roads,
+                    the cytoplasm and the membrane can be selected to open
+                    information about that cell structure. The same structures
+                    are listed in the directory next to the map.
+                  </desc>
+                </svg>
+                <noscript>
+                  <p class="map-noscript">The interactive map needs JavaScript.</p>
+                </noscript>
+              </div>
+              <p class="map-legend">
+                <span class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--vesicle" aria-hidden="true"></span>Round sprites on the roads are vesicles in transit</span>
+                <span class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--atp" aria-hidden="true"></span>Amber squares near power plants illustrate ATP supply</span>
+              </p>
             </div>
-          </div>
 
-          <p class="cell-city-map-section__instruction">
-            Explore the cell city. Click a district to learn more.
-          </p>
+            <aside class="city-directory" aria-labelledby="directoryTitle">
+              <h2 id="directoryTitle">Structures</h2>
+              <form id="directorySearch" role="search" class="directory-search">
+                <label for="directoryFilter" class="directory-search__label">Search structures</label>
+                <input
+                  id="directoryFilter"
+                  class="lab-input"
+                  type="search"
+                  placeholder="e.g. energy, DNA, lysosome"
+                  autocomplete="off"
+                />
+              </form>
+              <p id="directoryStatus" class="directory-status" aria-live="polite"></p>
+              <ul id="directoryList" class="directory-list"></ul>
+            </aside>
+          </div>
         </div>
       </section>
 
-      <!-- ============ CELL → CITY GUIDE ============ -->
+      <!-- ============ CELL → CITY GUIDE (secondary reference) ============ -->
       <section class="city-guide-section">
         <div class="container-fluid page-container">
-          <h2>Cell &rarr; City Guide</h2>
-          <p class="city-guide-section__lead">
-            This is the metaphor, not the biology — detailed scientific
-            descriptions will live inside the interactive city as you
-            explore each structure.
-          </p>
-
-          <div class="glass-panel city-guide">
-            <dl class="city-guide__list">
-              <div class="city-guide__row">
-                <dt>Nucleus</dt>
-                <dd>City Hall</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Mitochondria</dt>
-                <dd>Power Plants</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Ribosomes</dt>
-                <dd>Protein Factories</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Rough Endoplasmic Reticulum</dt>
-                <dd>Manufacturing Network</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Smooth Endoplasmic Reticulum</dt>
-                <dd>Chemical Processing Center</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Golgi Apparatus</dt>
-                <dd>Distribution Centre</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Lysosomes</dt>
-                <dd>Recycling / Waste Management</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Cell Membrane</dt>
-                <dd>City Boundary</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Cytoplasm</dt>
-                <dd>City Environment</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Vesicles</dt>
-                <dd>Delivery Vehicles</dd>
-              </div>
-              <div class="city-guide__row">
-                <dt>Cytoskeleton</dt>
-                <dd>Internal Road Network</dd>
-              </div>
-            </dl>
-          </div>
+          <details class="city-guide glass-panel">
+            <summary class="city-guide__summary">Cell &rarr; City guide</summary>
+            <p class="city-guide-section__lead">
+              The city is a metaphor to help you remember what each structure
+              does. The popups on the map explain the real biology.
+            </p>
+            <dl class="city-guide__list" id="cityGuideList"></dl>
+          </details>
         </div>
       </section>
 
@@ -257,16 +167,74 @@
         <div class="container-fluid page-container">
           <div class="glass-panel city-cta">
             <h2>Ready to test what you've learned?</h2>
-            <p>
-              Put the city metaphor into practice with a short interactive
-              challenge.
-            </p>
-            <a class="btn-cell-city" href="challenges.html">Take a Challenge</a>
+            <p>Try a short challenge without leaving the city.</p>
+            <button type="button" class="btn-cell-city btn-cell-city--primary js-open-challenge">
+              Take a Challenge
+            </button>
           </div>
         </div>
       </section>
     </main>
 
+    <!-- ============ ORGANELLE MODAL (summary view + detailed view) ============ -->
+    <div
+      class="modal fade"
+      id="organelleModal"
+      tabindex="-1"
+      aria-labelledby="organelleModalTitle"
+      aria-describedby="organelleSummaryText"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content pixel-frame">
+          <div class="modal-header organelle-modal__header">
+            <div class="organelle-modal__sprite" id="organelleSprite"></div>
+            <div class="organelle-modal__heading">
+              <p class="organelle-modal__kind" id="organelleKind"></p>
+              <h2 class="modal-title" id="organelleModalTitle" tabindex="-1"></h2>
+              <p class="organelle-modal__role" id="organelleRole"></p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="organelleSummaryView">
+              <p id="organelleSummaryText"></p>
+              <p class="organelle-modal__analogy">
+                <strong>In Cell City:</strong> <span id="organelleAnalogy"></span>
+              </p>
+            </div>
+            <div id="organelleDetailView" hidden>
+              <div id="organelleDetailIntro"></div>
+              <div class="accordion" id="organelleAccordion"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-cell-city btn-cell-city--primary" id="organelleLearnMore">Learn More</button>
+            <button type="button" class="btn-cell-city" id="organelleBack" hidden>&larr; Back to summary</button>
+            <button type="button" class="btn-cell-city btn-cell-city--quiet" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CHALLENGE MODAL (shared challenge engine) ============ -->
+    <div
+      class="modal fade"
+      id="challengeModal"
+      tabindex="-1"
+      aria-labelledby="challengeModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content pixel-frame">
+          <div class="modal-header">
+            <h2 class="modal-title" id="challengeModalTitle">City Challenges</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="cityChallengeApp"></div>
+        </div>
+      </div>
+    </div>
     <footer class="cell-city-footer">
       <div class="cell-city-footer__content">
         <div class="cell-city-footer__brand">
@@ -306,7 +274,7 @@
       </div>
     </footer>
 
-    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar's collapse/toggler behavior -->
+    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar toggler, modals, tabs and accordions -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer

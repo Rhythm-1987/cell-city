@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cell City — Bio Lab</title>
+    <meta name="description" content="Analyse DNA, transcribe and translate sequences, explore the genetic code and visualise mutations." />
 
     <!-- Bootstrap (structural components only — Cell City look comes from style.css below) -->
     <link
@@ -15,6 +16,11 @@
     <link rel="stylesheet" href="css/style.css" />
 
     <script src="js/main.js" defer></script>
+    <script src="data/sprites.js" defer></script>
+    <script src="data/genetic-code.js" defer></script>
+    <script src="js/pixel.js" defer></script>
+    <script src="js/biolab-core.js" defer></script>
+    <script src="js/biolab.js" defer></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg cell-city-navbar">
@@ -73,13 +79,271 @@
       </div>
     </nav>
     <main>
-      <section>
-        <h2>Bio Lab</h2>
-        <p>Analyze DNA sequences in the Cell City Bioinformatics Lab.</p>
-        <p>This section will be developed during Phase 6.</p>
+      <section class="lab-section">
+        <div class="container-fluid page-container">
+          <div class="lab-hero">
+            <div class="lab-hero__text">
+              <ul class="base-tiles" aria-hidden="true">
+                <li class="base-tile--A">A</li>
+                <li class="base-tile--T">T</li>
+                <li class="base-tile--G">G</li>
+                <li class="base-tile--C">C</li>
+              </ul>
+              <h1>Bioinformatics Lab</h1>
+              <p class="lab-hero__lead">
+                Analyse DNA, follow it through transcription and translation,
+                look up codons and see what mutations do to a sequence. All
+                calculations run in your browser.
+              </p>
+            </div>
+            <span class="lab-hero__art" data-sprite="flask" data-scale="5"></span>
+          </div>
+
+          <div class="lab-workbench pixel-frame">
+            <ul class="nav nav-pills lab-tabs" id="labTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-analyse" data-bs-toggle="pill" data-bs-target="#pane-analyse" type="button" role="tab" aria-controls="pane-analyse" aria-selected="true">DNA Analyser</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-transcribe" data-bs-toggle="pill" data-bs-target="#pane-transcribe" type="button" role="tab" aria-controls="pane-transcribe" aria-selected="false" tabindex="-1">Transcription</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-translate" data-bs-toggle="pill" data-bs-target="#pane-translate" type="button" role="tab" aria-controls="pane-translate" aria-selected="false" tabindex="-1">Translation</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-codons" data-bs-toggle="pill" data-bs-target="#pane-codons" type="button" role="tab" aria-controls="pane-codons" aria-selected="false" tabindex="-1">Codon Explorer</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-mutate" data-bs-toggle="pill" data-bs-target="#pane-mutate" type="button" role="tab" aria-controls="pane-mutate" aria-selected="false" tabindex="-1">Mutations</button>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <!-- ===== A. DNA ANALYSER ===== -->
+              <div class="tab-pane fade show active lab-pane" id="pane-analyse" role="tabpanel" aria-labelledby="tab-analyse" tabindex="0">
+                <h2>DNA sequence analyser</h2>
+                <p class="lab-pane__intro">
+                  Paste a DNA sequence to see its length, base counts, GC
+                  content, complement and reverse complement.
+                </p>
+                <div class="lab-grid">
+                  <form class="lab-form" id="analyse-form" novalidate>
+                    <label class="lab-label" for="analyse-input">DNA sequence</label>
+                    <textarea class="lab-textarea" id="analyse-input" rows="5" spellcheck="false" autocomplete="off" aria-describedby="analyse-hint analyse-error" placeholder="ATGGCCATTGTAATGGGCCGCTGA"></textarea>
+                    <p class="lab-hint" id="analyse-hint">
+                      Use the letters A, C, G and T. Spaces, line breaks and
+                      lower case are ignored, as are FASTA header lines that
+                      begin with &gt;.
+                    </p>
+                    <p class="lab-error" id="analyse-error" role="alert" hidden></p>
+                    <div class="lab-actions">
+                      <button type="submit" class="btn-cell-city btn-cell-city--primary">Analyse</button>
+                      <button type="button" class="btn-cell-city" data-example>Use example</button>
+                      <button type="button" class="btn-cell-city btn-cell-city--quiet" data-clear>Clear</button>
+                    </div>
+                  </form>
+                  <div class="lab-results" id="analyse-results" aria-live="polite">
+                    <p class="lab-empty">Results will appear here after you analyse a sequence.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== B. TRANSCRIPTION ===== -->
+              <div class="tab-pane fade lab-pane" id="pane-transcribe" role="tabpanel" aria-labelledby="tab-transcribe" tabindex="0">
+                <h2>DNA to RNA transcription</h2>
+                <p class="lab-pane__intro">
+                  Transcription copies a gene into messenger RNA (mRNA). Choose
+                  which DNA strand you are entering.
+                </p>
+                <div class="lab-grid">
+                  <form class="lab-form" id="transcribe-form" novalidate>
+                    <label class="lab-label" for="transcribe-input">DNA sequence (5&prime; &rarr; 3&prime;)</label>
+                    <textarea class="lab-textarea" id="transcribe-input" rows="4" spellcheck="false" autocomplete="off" aria-describedby="transcribe-error" placeholder="ATGGCCATTGTAATGGGCCGCTGA"></textarea>
+                    <p class="lab-error" id="transcribe-error" role="alert" hidden></p>
+                    <fieldset class="lab-fieldset">
+                      <legend>Strand you are entering</legend>
+                      <div class="lab-choice">
+                        <input type="radio" name="strand" id="strand-coding" value="coding" checked />
+                        <label for="strand-coding">Coding (sense) strand</label>
+                      </div>
+                      <div class="lab-choice">
+                        <input type="radio" name="strand" id="strand-template" value="template" />
+                        <label for="strand-template">Template (antisense) strand</label>
+                      </div>
+                    </fieldset>
+                    <div class="lab-note">
+                      <p><strong>Convention.</strong> Sequences are always written 5&prime; &rarr; 3&prime;.</p>
+                      <p>The coding strand has the same sequence as the mRNA, with every T replaced by U.</p>
+                      <p>The template strand is read by RNA polymerase, so the mRNA is its reverse complement with U in place of T.</p>
+                    </div>
+                    <div class="lab-actions">
+                      <button type="submit" class="btn-cell-city btn-cell-city--primary">Transcribe</button>
+                      <button type="button" class="btn-cell-city" data-example>Use example</button>
+                      <button type="button" class="btn-cell-city btn-cell-city--quiet" data-clear>Clear</button>
+                    </div>
+                  </form>
+                  <div class="lab-results" id="transcribe-results" aria-live="polite">
+                    <p class="lab-empty">The mRNA sequence will appear here.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== C. TRANSLATION ===== -->
+              <div class="tab-pane fade lab-pane" id="pane-translate" role="tabpanel" aria-labelledby="tab-translate" tabindex="0">
+                <h2>RNA to protein translation</h2>
+                <p class="lab-pane__intro">
+                  Translation reads mRNA three bases (one codon) at a time and
+                  looks each codon up in the standard genetic code.
+                </p>
+                <div class="lab-grid">
+                  <form class="lab-form" id="translate-form" novalidate>
+                    <label class="lab-label" for="translate-input">RNA sequence (5&prime; &rarr; 3&prime;)</label>
+                    <textarea class="lab-textarea" id="translate-input" rows="4" spellcheck="false" autocomplete="off" aria-describedby="translate-error" placeholder="AUGGCCAUUGUAAUGGGCCGCUGA"></textarea>
+                    <p class="lab-error" id="translate-error" role="alert" hidden></p>
+                    <div class="lab-field">
+                      <label class="lab-label" for="translate-frame">Reading frame</label>
+                      <select class="lab-select" id="translate-frame">
+                        <option value="1">Frame 1 (start at base 1)</option>
+                        <option value="2">Frame 2 (start at base 2)</option>
+                        <option value="3">Frame 3 (start at base 3)</option>
+                      </select>
+                    </div>
+                    <div class="lab-choice">
+                      <input type="checkbox" id="translate-start" />
+                      <label for="translate-start">Begin at the first AUG in the chosen frame</label>
+                    </div>
+                    <div class="lab-choice">
+                      <input type="checkbox" id="translate-stop" />
+                      <label for="translate-stop">End at the first stop codon</label>
+                    </div>
+                    <div class="lab-note">
+                      <p><strong>Convention.</strong> Bases are counted from 1 at the 5&prime; end. Frame 1 reads codons starting at base 1, frame 2 at base 2 and frame 3 at base 3. Only the forward strand is read.</p>
+                      <p>Stop codons are shown as &ldquo;Stop&rdquo; and written * in the protein. Leftover bases at the end that do not form a full codon are not translated.</p>
+                    </div>
+                    <div class="lab-actions">
+                      <button type="submit" class="btn-cell-city btn-cell-city--primary">Translate</button>
+                      <button type="button" class="btn-cell-city" data-example>Use example</button>
+                      <button type="button" class="btn-cell-city btn-cell-city--quiet" data-clear>Clear</button>
+                    </div>
+                  </form>
+                  <div class="lab-results" id="translate-results" aria-live="polite">
+                    <p class="lab-empty">The amino-acid chain will appear here.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== D. CODON EXPLORER ===== -->
+              <div class="tab-pane fade lab-pane" id="pane-codons" role="tabpanel" aria-labelledby="tab-codons" tabindex="0">
+                <h2>Codon explorer</h2>
+                <p class="lab-pane__intro">
+                  The standard genetic code has 64 RNA codons: 61 code for an
+                  amino acid and 3 signal the end of translation. Build a codon
+                  below or search the table.
+                </p>
+                <div class="codon-builder">
+                  <div class="codon-builder__selects">
+                    <div class="lab-field">
+                      <label class="lab-label" for="codon-b1">First base</label>
+                      <select class="lab-select" id="codon-b1"></select>
+                    </div>
+                    <div class="lab-field">
+                      <label class="lab-label" for="codon-b2">Second base</label>
+                      <select class="lab-select" id="codon-b2"></select>
+                    </div>
+                    <div class="lab-field">
+                      <label class="lab-label" for="codon-b3">Third base</label>
+                      <select class="lab-select" id="codon-b3"></select>
+                    </div>
+                  </div>
+                  <div class="codon-result" id="codon-result" aria-live="polite"></div>
+                </div>
+
+                <div class="lab-field">
+                  <label class="lab-label" for="codon-search">Search the table</label>
+                  <input class="lab-input" id="codon-search" type="search" autocomplete="off" placeholder="Codon (AUG or ATG), amino acid (leucine, Leu, L) or stop" aria-describedby="codon-status" />
+                  <p class="lab-hint" id="codon-status" aria-live="polite"></p>
+                </div>
+                <div class="codon-table-wrap">
+                  <table class="codon-table">
+                    <caption class="visually-hidden">Standard genetic code: all 64 RNA codons</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Codon</th>
+                        <th scope="col">Amino acid</th>
+                        <th scope="col">3-letter</th>
+                        <th scope="col">1-letter</th>
+                      </tr>
+                    </thead>
+                    <tbody id="codon-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ===== E. MUTATION VISUALISER ===== -->
+              <div class="tab-pane fade lab-pane" id="pane-mutate" role="tabpanel" aria-labelledby="tab-mutate" tabindex="0">
+                <h2>Mutation visualiser</h2>
+                <p class="lab-pane__intro">
+                  Edit a DNA sequence by substituting, inserting or deleting a
+                  base and compare it with the original. This is a
+                  sequence-editing exercise: it does not predict real
+                  biological or clinical outcomes.
+                </p>
+                <form class="lab-form" id="mutate-form" novalidate>
+                  <div class="lab-grid">
+                    <div>
+                      <label class="lab-label" for="mutate-input">Original DNA sequence (up to 200 bases)</label>
+                      <textarea class="lab-textarea" id="mutate-input" rows="3" spellcheck="false" autocomplete="off" aria-describedby="mutate-error" placeholder="ATGGCCATTGTAATGGGCCGCTGA"></textarea>
+                      <p class="lab-error" id="mutate-error" role="alert" hidden></p>
+                    </div>
+                    <div>
+                      <fieldset class="lab-fieldset">
+                        <legend>Mutation type</legend>
+                        <div class="lab-choice">
+                          <input type="radio" name="mutation-type" id="mut-substitution" value="substitution" checked />
+                          <label for="mut-substitution">Substitution (replace a base)</label>
+                        </div>
+                        <div class="lab-choice">
+                          <input type="radio" name="mutation-type" id="mut-insertion" value="insertion" />
+                          <label for="mut-insertion">Insertion (add a base)</label>
+                        </div>
+                        <div class="lab-choice">
+                          <input type="radio" name="mutation-type" id="mut-deletion" value="deletion" />
+                          <label for="mut-deletion">Deletion (remove a base)</label>
+                        </div>
+                      </fieldset>
+                      <div class="lab-field-row">
+                        <div class="lab-field">
+                          <label class="lab-label" for="mutate-position">Position</label>
+                          <input class="lab-input" id="mutate-position" type="number" min="1" step="1" value="4" inputmode="numeric" aria-describedby="mutate-position-hint" />
+                        </div>
+                        <div class="lab-field" id="mutate-base-field">
+                          <label class="lab-label" for="mutate-base">New base</label>
+                          <select class="lab-select" id="mutate-base">
+                            <option>A</option>
+                            <option>C</option>
+                            <option>G</option>
+                            <option>T</option>
+                          </select>
+                        </div>
+                      </div>
+                      <p class="lab-hint" id="mutate-position-hint"></p>
+                    </div>
+                  </div>
+                  <div class="lab-actions">
+                    <button type="submit" class="btn-cell-city btn-cell-city--primary">Apply mutation</button>
+                    <button type="button" class="btn-cell-city" data-example>Use example</button>
+                    <button type="button" class="btn-cell-city btn-cell-city--quiet" data-clear>Clear</button>
+                  </div>
+                </form>
+                <div class="lab-results" id="mutate-results" aria-live="polite">
+                  <p class="lab-empty">Enter a sequence and apply a mutation to compare before and after.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
-
     <footer class="cell-city-footer">
       <div class="cell-city-footer__content">
         <div class="cell-city-footer__brand">
@@ -119,7 +383,7 @@
       </div>
     </footer>
 
-    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar's collapse/toggler behavior -->
+    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar toggler, modals, tabs and accordions -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer

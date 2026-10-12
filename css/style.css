@@ -32,9 +32,27 @@
   --color-panel-border: #dce7ee;
   --shadow-panel: 0 8px 30px rgba(16, 42, 67, 0.08);
 
+  /* Darker shades of the accents for text and filled controls, so small
+     text and white-on-colour labels meet WCAG AA contrast. */
+  --color-accent-strong: #00768a;
+  --color-green-strong: #0a7552;
+  --color-energy-strong: #8a5700;
+  --color-danger-strong: #b83249;
+  --color-mutation-strong: #6d28d9;
+  --color-control-border: #6b8296; /* form controls need 3:1 against white */
+
+  /* tints used for pixel-art surfaces and result highlights */
+  --tint-accent: #e1f3f6;
+  --tint-green: #e3f5ed;
+  --tint-energy: #fff3d6;
+  --tint-danger: #fdecef;
+  --tint-mutation: #efe8fd;
+
   /* shared metrics */
   --font-base: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --radius-md: 8px;
+  --pixel-shadow: 4px 4px 0 var(--color-panel-border);
 }
 
 /* ========================================
@@ -103,13 +121,13 @@ p {
    4. LINKS
    ======================================== */
 a {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-accent-secondary);
+  color: var(--color-green-strong);
   text-decoration: underline;
 }
 
@@ -120,28 +138,67 @@ a:hover {
   display: inline-block;
   font-family: var(--font-base);
   font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
   padding: 0.6em 1.4em;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-accent);
+  border: 2px solid var(--color-accent-strong);
   background: transparent;
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .btn-cell-city:hover {
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-strong);
   color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-cell-city:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .btn-cell-city-secondary {
-  border-color: var(--color-accent-secondary);
-  color: var(--color-accent-secondary);
+  border-color: var(--color-green-strong);
+  color: var(--color-green-strong);
 }
 
 .btn-cell-city-secondary:hover {
-  background-color: var(--color-accent-secondary);
+  background-color: var(--color-green-strong);
   color: #ffffff;
+}
+
+/* Primary action: filled, with a hard pixel-style shadow that "presses in". */
+.btn-cell-city--primary {
+  background-color: var(--color-accent-strong);
+  border-color: var(--color-text-primary);
+  color: #ffffff;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--color-text-primary);
+}
+
+.btn-cell-city--primary:hover {
+  background-color: #005f70;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--color-text-primary);
+}
+
+.btn-cell-city--primary:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--color-text-primary);
+}
+
+/* Low-emphasis action (Close, Back, Reset). */
+.btn-cell-city--quiet {
+  border-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+.btn-cell-city--quiet:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 }
 
 /* ========================================
@@ -199,7 +256,7 @@ section {
 }
 
 .cell-city-navbar__brand:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   text-decoration: none;
 }
 
@@ -220,7 +277,7 @@ section {
 }
 
 .cell-city-navbar__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   text-decoration: none;
 }
 
@@ -341,7 +398,7 @@ main {
 }
 
 .cell-city-footer__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   text-decoration: none;
 }
 
@@ -372,9 +429,30 @@ main {
    12. ACCESSIBILITY
    ======================================== */
 a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
 .btn-cell-city:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 3px solid var(--color-accent-strong);
   outline-offset: 2px;
+}
+
+/* Programmatic focus targets (headings moved into view) need no ring. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Current page in the navbar and footer. */
+.cell-city-navbar__link[aria-current="page"] {
+  color: var(--color-text-primary);
+  box-shadow: inset 0 -3px 0 var(--color-accent);
+}
+
+.cell-city-footer__link[aria-current="page"] {
+  color: var(--color-text-primary);
+  font-weight: 700;
 }
 
 /* ========================================
@@ -407,7 +485,7 @@ a:focus-visible,
 
 .hero-section__eyebrow {
   margin: 0 0 0.5rem;
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.08em;
@@ -438,51 +516,6 @@ a:focus-visible,
   justify-content: center;
 }
 
-/* Soft radial glow behind the hero image so it reads as a "living cell"
-   atmosphere rather than a pasted textbook illustration. */
-.hero-section__atmosphere {
-  position: absolute;
-  inset: -10% -5%;
-  z-index: 0;
-  background: radial-gradient(circle at 40% 35%, rgba(0, 159, 176, 0.16), transparent 60%),
-    radial-gradient(circle at 65% 65%, rgba(14, 159, 110, 0.14), transparent 55%);
-  filter: blur(4px);
-  pointer-events: none;
-}
-
-/* Empty visual slot reserved for the future hero illustration. Sized to the
-   asset's intended ~4:3 landscape ratio so swapping in the real image later
-   won't reflow the hero. */
-.hero-section__placeholder {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 4 / 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  text-align: center;
-  border: 1px dashed var(--color-panel-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-secondary);
-}
-
-.hero-section__placeholder-label {
-  font-weight: 600;
-  color: var(--color-text-secondary);
-}
-
-.hero-section__placeholder-note {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  opacity: 0.75;
-  max-width: 32ch;
-}
-
 /* --- What is Cell City? --- */
 .intro-section__text {
   max-width: 65ch;
@@ -503,7 +536,7 @@ a:focus-visible,
 }
 
 .concept-pillar__title {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -537,24 +570,6 @@ a:focus-visible,
   box-shadow: 0 12px 34px rgba(16, 42, 67, 0.12);
 }
 
-.feature-card__icon {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 1rem;
-}
-
-.feature-card__icon--cell {
-  color: var(--color-accent);
-}
-
-.feature-card__icon--lab {
-  color: var(--color-accent-secondary);
-}
-
-.feature-card__icon--challenges {
-  color: var(--color-energy);
-}
-
 .feature-card__title {
   margin-bottom: 0.4em;
 }
@@ -579,10 +594,6 @@ a:focus-visible,
   color: var(--color-text-primary);
   font-size: 1.15rem;
   font-style: italic;
-}
-
-.closing-section__link {
-  font-weight: 600;
 }
 
 /* --- Responsive adjustments --- */
@@ -611,14 +622,434 @@ a:focus-visible,
   }
 }
 
+
+
 /* ========================================
-   15. CITY PAGE
+   15. PIXEL-ART SYSTEM (shared)
    ======================================== */
 
-/* --- Cell → City guide --- */
-.city-guide-section__lead {
+/* Sprites are SVG built from 1x1 pixel rects; keep them crisp when scaled. */
+.pixel-sprite {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+/* Hard-edged frame: square corners and an offset block shadow. */
+.pixel-frame {
+  background: #ffffff;
+  border: 2px solid var(--color-text-primary);
+  border-radius: 0;
+  box-shadow: var(--pixel-shadow);
+}
+
+/* Four nucleotide "tiles" used as a decorative header on the lab page. */
+.base-tiles {
+  display: inline-flex;
+  gap: 4px;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.base-tiles li {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--color-text-primary);
+  font: 700 0.9rem/1 var(--font-mono);
+  color: #ffffff;
+  box-shadow: 2px 2px 0 var(--color-panel-border);
+}
+
+.base-tiles .base-tile--A {
+  background: var(--color-accent-strong);
+}
+.base-tiles .base-tile--T {
+  background: var(--color-danger-strong);
+}
+.base-tiles .base-tile--G {
+  background: var(--color-green-strong);
+}
+.base-tiles .base-tile--C {
+  background: var(--color-energy-strong);
+}
+
+/* ========================================
+   16. HOME — HERO SCENE & FEATURE CARDS
+   ======================================== */
+.hero-section__media {
+  align-self: center;
+}
+
+.hero-section__scene-frame {
+  width: 100%;
+  max-width: 560px;
+  padding: 0.75rem;
+  background-color: var(--color-bg-secondary);
+  background-image: linear-gradient(rgba(16, 42, 67, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 42, 67, 0.05) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.hero-section__scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-bg-secondary);
+}
+
+.hero-section__actions .btn-cell-city {
+  font-size: 1.05rem;
+  padding: 0.7em 1.6em;
+}
+
+.concept-pillar__title::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin: 0 auto 0.6rem;
+  background: var(--color-accent);
+  box-shadow: 3px 3px 0 var(--color-panel-border);
+}
+
+.concept-pillar:nth-child(2) .concept-pillar__title::before {
+  background: var(--color-accent-secondary);
+}
+
+.concept-pillar:nth-child(3) .concept-pillar__title::before {
+  background: var(--color-energy);
+}
+
+.feature-card {
+  border: 2px solid var(--color-text-primary);
+  border-radius: 0;
+  box-shadow: var(--pixel-shadow);
+}
+
+.feature-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-panel-border);
+}
+
+.feature-card__sprite {
+  display: grid;
+  place-items: start;
+  height: 84px;
+  margin-bottom: 1rem;
+}
+
+/* ========================================
+   17. CITY PAGE
+   ======================================== */
+.cell-city-map-section {
+  padding-top: 1rem;
+}
+
+.cell-city-map-section__intro {
+  max-width: 70ch;
+}
+
+.cell-city-map-section__lead {
   color: var(--color-text-secondary);
-  max-width: 65ch;
+  font-size: 1.1rem;
+}
+
+.city-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin: 0.5rem 0 1.25rem;
+}
+
+/* Map beside the structure directory; stacks on tablets and phones. */
+.city-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* --- Map container and viewport --- */
+.cell-city-map {
+  min-width: 0;
+  padding: 1rem;
+  background: var(--color-bg-secondary);
+}
+
+.cell-city-map__viewport {
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.cell-city-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.map-noscript {
+  margin: 1rem;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+  margin: 0.75rem 0 0;
+  max-width: none;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.map-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.map-legend__swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+
+.map-legend__swatch--vesicle {
+  background: #b8e6ec;
+  border: 2px solid #00768a;
+}
+
+.map-legend__swatch--atp {
+  background: var(--color-energy);
+}
+
+/* --- Scene: environment tiles --- */
+.cytoplasm-fill {
+  fill: #fbfdfe;
+}
+
+.cytoplasm-speck--a {
+  fill: #e4f2f5;
+}
+
+.cytoplasm-speck--b {
+  fill: #e6f4ec;
+}
+
+.membrane-head--a {
+  fill: #00768a;
+}
+
+.membrane-head--b {
+  fill: #009fb0;
+}
+
+.membrane-tails {
+  fill: #cde9ee;
+}
+
+.membrane-protein {
+  fill: #7c3aed;
+}
+
+.membrane-pore {
+  fill: #ffffff;
+}
+
+.road-tile--main-a {
+  fill: #c2d6e0;
+}
+
+.road-tile--main-b {
+  fill: #d3e2ea;
+}
+
+.road-tile--side-a {
+  fill: #9fd6de;
+}
+
+.road-tile--side-b {
+  fill: #b9e4ea;
+}
+
+/* --- Scene: interactive structures --- */
+.organelle-building {
+  cursor: pointer;
+  outline: none;
+}
+
+.hit-area {
+  fill: transparent;
+}
+
+.focus-frame {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 3;
+  stroke-dasharray: 8 6;
+  pointer-events: none;
+}
+
+.organelle-building:hover .focus-frame,
+.organelle-building:focus-visible .focus-frame {
+  stroke: var(--color-accent-strong);
+  fill: rgba(0, 159, 176, 0.1);
+}
+
+.organelle-building.is-selected .focus-frame {
+  stroke: var(--color-energy);
+  stroke-dasharray: none;
+  fill: rgba(217, 142, 0, 0.14);
+}
+
+/* Environment frames outline an area without tinting the whole cell. */
+.organelle-building--env:hover .focus-frame,
+.organelle-building--env:focus-visible .focus-frame,
+.organelle-building--env.is-selected .focus-frame {
+  fill: none;
+}
+
+.organelle-building--env:hover,
+.organelle-building--env:focus-visible {
+  filter: drop-shadow(0 0 3px rgba(0, 118, 138, 0.9));
+}
+
+.organelle-building--env.is-selected {
+  filter: drop-shadow(0 0 4px rgba(217, 142, 0, 1));
+}
+
+.organelle-building.is-dimmed {
+  opacity: 0.25;
+}
+
+.map-label,
+.env-label {
+  pointer-events: none;
+  user-select: none;
+}
+
+.map-label {
+  fill: var(--color-text-primary);
+  font: 700 15px var(--font-base);
+  stroke: #ffffff;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.map-label--role {
+  fill: var(--color-text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* --- Directory --- */
+.city-directory {
+  min-width: 0;
+  padding: 1rem;
+  background: #ffffff;
+  border: 2px solid var(--color-text-primary);
+  box-shadow: var(--pixel-shadow);
+}
+
+.city-directory h2 {
+  font-size: 1.15rem;
+}
+
+.directory-search__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.directory-status {
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+.directory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 480px;
+  margin: 0;
+  padding: 0 0.25rem 0 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.directory-list__row[hidden] {
+  display: none;
+}
+
+.directory-item {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  border: 2px solid var(--color-panel-border);
+  cursor: pointer;
+}
+
+.directory-item:hover {
+  border-color: var(--color-accent-strong);
+  background: var(--tint-accent);
+}
+
+.directory-item__sprite {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 38px;
+}
+
+.directory-item__sprite svg {
+  width: 100%;
+  height: 100%;
+}
+
+.directory-item__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.directory-item__name {
+  font-weight: 600;
+}
+
+.directory-item__role {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+/* --- Cell → City guide (secondary, collapsed by default) --- */
+.city-guide-section {
+  margin-top: 1.5rem;
+}
+
+.city-guide__summary {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.city-guide-section__lead {
+  margin-top: 0.75rem;
+  color: var(--color-text-secondary);
 }
 
 .city-guide__list {
@@ -635,11 +1066,11 @@ a:focus-visible,
   gap: 0.75rem;
   padding: 0.65rem 0.85rem;
   background: var(--color-bg-secondary);
-  border-radius: var(--radius-md);
 }
 
 .city-guide__row dt {
   color: var(--color-text-secondary);
+  font-weight: 400;
 }
 
 .city-guide__row dd {
@@ -649,7 +1080,6 @@ a:focus-visible,
   text-align: right;
 }
 
-/* --- Challenge entry point --- */
 .city-cta {
   text-align: center;
 }
@@ -660,215 +1090,1051 @@ a:focus-visible,
 }
 
 /* ========================================
-   PHASE 4 — CELL CITY
+   18. MODALS (organelle details + city challenge)
    ======================================== */
-
-/* --- City map section / intro --- */
-.cell-city-map-section {
-  padding-top: 1rem;
+.modal-content.pixel-frame {
+  box-shadow: 6px 6px 0 var(--color-panel-border);
 }
 
-.cell-city-map-section__intro {
-  max-width: 70ch;
+.modal-header,
+.modal-footer {
+  border-color: var(--color-panel-border);
 }
 
-.cell-city-map-section__lead {
-  color: var(--color-text-secondary);
+.modal-title {
+  margin: 0;
+}
+
+.modal-footer {
+  gap: 0.5rem;
+}
+
+.organelle-modal__header {
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.organelle-modal__sprite {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 96px;
+  height: 80px;
+  padding: 4px;
+  background-color: var(--color-bg-secondary);
+  background-image: linear-gradient(rgba(16, 42, 67, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 42, 67, 0.05) 1px, transparent 1px);
+  background-size: 8px 8px;
+  border: 2px solid var(--color-panel-border);
+}
+
+.organelle-modal__sprite svg {
+  width: 100%;
+  height: 100%;
+}
+
+.organelle-modal__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.organelle-modal__kind {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-strong);
+}
+
+.organelle-modal__role {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+  color: var(--color-energy-strong);
+}
+
+.organelle-modal__analogy {
+  padding: 0.75rem 1rem;
+  background: var(--tint-energy);
+  border-left: 4px solid var(--color-energy);
+}
+
+.accordion {
+  --bs-accordion-border-radius: 0;
+  --bs-accordion-inner-border-radius: 0;
+  --bs-accordion-border-color: var(--color-panel-border);
+  --bs-accordion-btn-focus-box-shadow: none;
+  --bs-accordion-active-bg: var(--color-bg-secondary);
+  --bs-accordion-active-color: var(--color-text-primary);
+  --bs-accordion-btn-color: var(--color-text-primary);
+  margin-top: 1rem;
+}
+
+.accordion-button {
+  font-weight: 600;
+}
+
+.accordion-body ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.accordion-body li + li {
+  margin-top: 0.4rem;
+}
+
+.accordion-body ul.organelle-related {
+  list-style: none;
+  padding-left: 0;
+}
+
+.link-button {
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent-strong);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--color-green-strong);
+}
+
+/* ========================================
+   19. BIO LAB
+   ======================================== */
+.lab-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.lab-hero__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lab-hero__lead {
   font-size: 1.1rem;
 }
 
-.cell-city-map-section__instruction {
-  margin: 1rem 0 0;
-  color: var(--color-text-secondary);
-  font-size: 0.95rem;
-  text-align: center;
+.lab-hero__art {
+  flex: none;
 }
 
-/* --- Status strip --- */
-.cell-city-status {
+.lab-workbench {
+  padding: 1rem;
+}
+
+/* Tabs (Bootstrap nav-pills, restyled as chunky pixel buttons). */
+.lab-tabs {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0 0 1rem;
+  border-bottom: 2px solid var(--color-panel-border);
+  list-style: none;
 }
 
-.cell-city-status__label {
+.lab-tabs .nav-link {
+  padding: 0.5rem 1rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  background: #ffffff;
+  border: 2px solid var(--color-panel-border);
+  border-radius: 0;
+}
+
+.lab-tabs .nav-link:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-accent-strong);
+}
+
+.lab-tabs .nav-link.active {
+  color: #ffffff;
+  background: var(--color-accent-strong);
+  border-color: var(--color-text-primary);
+  box-shadow: 3px 3px 0 var(--color-text-primary);
+}
+
+.lab-pane > h2 {
+  font-size: 1.25rem;
+}
+
+.lab-pane__intro {
+  max-width: 75ch;
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* --- Forms --- */
+.lab-form {
+  min-width: 0;
+}
+
+.lab-label,
+.lab-fieldset legend {
+  display: block;
+  float: none;
+  margin: 0 0 0.35rem;
+  padding: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--color-text-primary);
 }
 
-.cell-city-status__value {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+.lab-fieldset {
+  min-width: 0;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+
+.lab-input,
+.lab-textarea,
+.lab-select {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  color: var(--color-text-primary);
+  background: #ffffff;
+  border: 2px solid var(--color-control-border);
+  border-radius: 0;
+}
+
+.lab-textarea {
+  min-height: 6.5rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+
+.lab-input[aria-invalid="true"],
+.lab-textarea[aria-invalid="true"] {
+  border-color: var(--color-danger-strong);
+}
+
+.lab-field {
+  margin-bottom: 1rem;
+}
+
+.lab-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.lab-field-row > .lab-field {
+  flex: 1 1 9rem;
+  min-width: 0;
+}
+
+.lab-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+}
+
+.lab-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.lab-choice input {
+  margin-top: 0.3rem;
+  accent-color: var(--color-accent-strong);
+}
+
+.lab-choice label {
+  color: var(--color-text-primary);
+}
+
+.lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.lab-note {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  background: var(--tint-accent);
+  border-left: 4px solid var(--color-accent);
+}
+
+.lab-note p {
+  margin: 0;
+  max-width: none;
+}
+
+.lab-note p + p {
+  margin-top: 0.4rem;
+}
+
+.lab-error {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.9rem;
+  color: var(--color-danger-strong);
+  font-weight: 500;
+  background: var(--tint-danger);
+  border-left: 4px solid var(--color-danger);
+}
+
+.lab-warning {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.9rem;
+  color: var(--color-energy-strong);
+  background: var(--tint-energy);
+  border-left: 4px solid var(--color-energy);
+}
+
+/* --- Results --- */
+.lab-results {
+  min-width: 0;
+}
+
+.lab-empty {
+  margin: 0;
+  padding: 1.25rem;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border: 2px dashed var(--color-panel-border);
+}
+
+.result-block {
+  margin-bottom: 1.25rem;
+}
+
+.result-block h3 {
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.result-block__meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+}
+
+.sequence-output {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  font: 600 0.95rem/1.7 var(--font-mono);
+  letter-spacing: 0.08em;
+  overflow-wrap: anywhere;
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-panel-border);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.6rem;
+  margin: 0 0 1.25rem;
+}
+
+.stat-card {
+  padding: 0.6rem 0.75rem;
+  background: #ffffff;
+  border: 2px solid var(--color-panel-border);
+}
+
+.stat-card dt {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--color-text-secondary);
 }
 
-.cell-city-status__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-accent-secondary);
+.stat-card dd {
+  margin: 0.15rem 0 0;
+  font: 700 1.5rem/1.2 var(--font-mono);
+  color: var(--color-text-primary);
 }
 
-/* --- Element 15: City container --- */
-/* The dominant, app-like environment the city map lives in. */
-.cell-city-map {
+.stat-card--gc {
+  background: var(--tint-green);
+  border-color: var(--color-green-strong);
+}
+
+.base-bar {
+  height: 10px;
+  margin-top: 0.4rem;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-panel-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-panel);
+}
+
+.base-bar > span {
+  display: block;
+  height: 100%;
+  /* Segmented fill gives the bars a pixel-block look. */
+  background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgba(255, 255, 255, 0.55) 6px 8px);
+}
+
+.base-bar--A > span {
+  background-color: var(--color-accent-strong);
+}
+.base-bar--T > span {
+  background-color: var(--color-danger-strong);
+}
+.base-bar--G > span {
+  background-color: var(--color-green-strong);
+}
+.base-bar--C > span {
+  background-color: var(--color-energy-strong);
+}
+
+/* Bases inside sequences are coloured by letter (the letter is always shown). */
+.seq-base {
+  font-weight: 700;
+}
+.seq-base--A {
+  color: var(--color-accent-strong);
+}
+.seq-base--T,
+.seq-base--U {
+  color: var(--color-danger-strong);
+}
+.seq-base--G {
+  color: var(--color-green-strong);
+}
+.seq-base--C {
+  color: var(--color-energy-strong);
+}
+
+/* Inline monospace text for sequences inside sentences. */
+.mono {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+/* --- Translation --- */
+.codon-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.codon-chip {
+  min-width: 3.6rem;
+  padding: 0.3rem 0.45rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  line-height: 1.3;
+  background: #ffffff;
+  border: 2px solid var(--color-control-border);
+}
+
+.codon-chip__codon {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.codon-chip__aa {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.codon-chip.is-start {
+  background: var(--tint-energy);
+  border-color: var(--color-energy-strong);
+}
+
+.codon-chip.is-stop {
+  background: var(--tint-danger);
+  border-color: var(--color-danger-strong);
+}
+
+/* --- Codon explorer --- */
+.codon-builder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.codon-builder__selects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.codon-builder__selects .lab-field {
+  margin: 0;
+  min-width: 6.5rem;
+}
+
+.codon-result {
+  flex: 1 1 14rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-panel-border);
+}
+
+.codon-result__codon {
+  margin: 0;
+  font: 700 1.5rem/1.2 var(--font-mono);
+  letter-spacing: 0.1em;
+  color: var(--color-text-primary);
+}
+
+.codon-result__aa {
+  margin: 0.2rem 0 0;
+  color: var(--color-text-primary);
+}
+
+.codon-table-wrap {
+  max-height: 460px;
+  overflow: auto;
+  border: 2px solid var(--color-panel-border);
+}
+
+.codon-table {
+  width: 100%;
+  margin: 0;
+  font-size: 0.95rem;
+  border-collapse: collapse;
+}
+
+.codon-table th,
+.codon-table td {
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-panel-border);
+}
+
+.codon-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border-bottom: 2px solid var(--color-panel-border);
+}
+
+.codon-table td:first-child {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.codon-table .codon-pick {
+  padding: 0.1rem 0.45rem;
+  font: inherit;
+  color: var(--color-accent-strong);
+  background: transparent;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.codon-table .codon-pick:hover {
+  border-color: var(--color-accent-strong);
+}
+
+.codon-table tr.is-stop td {
+  background: var(--tint-danger);
+}
+
+.codon-table tr.is-start td {
+  background: var(--tint-energy);
+}
+
+.codon-table tr.is-selected td {
+  box-shadow: inset 0 0 0 2px var(--color-accent-strong);
+}
+
+/* --- Mutation visualiser --- */
+.mut-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  font-size: 0.85rem;
+  list-style: none;
+}
+
+.mut-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.mut-blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 0.75rem;
+}
+
+.mut-block {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto auto;
+  gap: 2px;
+}
+
+.mut-cell {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.9rem;
+  font: 700 1rem/1 var(--font-mono);
+  border: 2px solid transparent;
+}
+
+.mut-cell--index {
+  height: 1.1rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.mut-cell.is-changed {
+  background: var(--tint-mutation);
+  border-color: var(--color-mutation-strong);
+  color: var(--color-mutation-strong);
+}
+
+.mut-cell.is-inserted {
+  background: var(--tint-green);
+  border-color: var(--color-green-strong);
+  color: var(--color-green-strong);
+  text-decoration: underline;
+}
+
+.mut-cell.is-deleted {
+  background: var(--tint-danger);
+  border-color: var(--color-danger-strong);
+  color: var(--color-danger-strong);
+  text-decoration: line-through;
+}
+
+.mut-cell.is-gap {
+  color: var(--color-text-secondary);
+  background: repeating-linear-gradient(45deg, #ffffff 0 3px, var(--color-panel-border) 3px 5px);
+}
+
+.mut-legend .mut-cell {
+  width: 1.4rem;
+  height: 1.4rem;
+  font-size: 0.85rem;
+}
+
+.mut-summary {
+  margin: 1rem 0 0.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--color-text-primary);
+  background: var(--tint-mutation);
+  border-left: 4px solid var(--color-mutation);
+}
+
+.mut-summary p {
+  margin: 0;
+  max-width: none;
+}
+
+.mut-summary p + p {
+  margin-top: 0.35rem;
+}
+
+/* ========================================
+   20. CHALLENGES
+   ======================================== */
+.challenges-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.challenges-hero__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.challenges-panel {
+  min-height: 320px;
   padding: 1.5rem;
 }
 
-/* --- Element 16: SVG city map viewport --- */
-/* Responsive sizing: the SVG's viewBox handles internal proportions, this
-   wrapper just keeps it centered and prevents horizontal overflow. */
-.cell-city-map__viewport {
-  max-width: 1100px;
-  margin: 0 auto;
-  overflow: hidden;
+.challenge-heading {
+  font-size: 1.3rem;
 }
 
-.cell-city-map__svg {
-  display: block;
+.challenge-hub__summary {
+  color: var(--color-text-secondary);
+}
+
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.challenge-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: #ffffff;
+  border: 2px solid var(--color-text-primary);
+  box-shadow: var(--pixel-shadow);
+}
+
+.challenge-card__sprite {
+  display: grid;
+  place-items: start;
+  height: 66px;
+  margin-bottom: 0.75rem;
+}
+
+.challenge-card__sprite svg {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+}
+
+.challenge-card__title {
+  margin-bottom: 0.3rem;
+  font-size: 1.05rem;
+}
+
+.challenge-card__blurb {
+  margin-bottom: 0.4rem;
+  font-size: 0.92rem;
+}
+
+.challenge-card__meta,
+.challenge-card__status {
+  margin-bottom: 0.3rem;
+  font-size: 0.85rem;
+}
+
+.challenge-card__status {
+  margin-bottom: 0.9rem;
+}
+
+.challenge-card__status.is-done {
+  font-weight: 600;
+  color: var(--color-green-strong);
+}
+
+.challenge-card .btn-cell-city {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* --- Quiz --- */
+.quiz__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.quiz__category {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent-strong);
+}
+
+.quiz__count {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.quiz-progress {
+  height: 12px;
+  margin-bottom: 1.25rem;
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-text-primary);
+}
+
+.quiz-progress__bar {
+  height: 100%;
+  background-color: var(--color-accent-secondary);
+  background-image: repeating-linear-gradient(90deg, transparent 0 8px, rgba(255, 255, 255, 0.5) 8px 10px);
+  transition: width 0.3s steps(6);
+}
+
+.quiz__prompt {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.quiz__options {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
-  height: auto;
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text-primary);
+  background: #ffffff;
+  border: 2px solid var(--color-control-border);
+  cursor: pointer;
 }
 
-/* --- Element 17: Cell membrane / border --- */
-.cell-membrane__fill {
-  fill: #ffffff;
-  fill-opacity: 0.92;
+.quiz-option:hover:not(:disabled) {
+  background: var(--tint-accent);
+  border-color: var(--color-accent-strong);
 }
 
-.cell-membrane__outer {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 3;
-  stroke-opacity: 0.55;
+.quiz-option:disabled {
+  cursor: default;
 }
 
-.cell-membrane__inner {
-  fill: none;
-  stroke: var(--color-accent-secondary);
-  stroke-width: 1;
-  stroke-opacity: 0.3;
+.quiz-option__letter {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  font: 700 0.9rem var(--font-mono);
+  color: #ffffff;
+  background: var(--color-text-primary);
 }
 
-/* Very slow, very subtle "breathing" scale on the membrane group. */
-.cell-membrane {
-  transform-origin: 500px 320px;
-  animation: membrane-breathe 9s ease-in-out infinite alternate;
+.quiz-option__text {
+  flex: 1;
+  min-width: 0;
 }
 
-@keyframes membrane-breathe {
-  from {
-    transform: scale(1);
+.quiz-option__flag {
+  flex: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.quiz-option.is-correct {
+  background: var(--tint-green);
+  border-color: var(--color-green-strong);
+}
+
+.quiz-option.is-correct .quiz-option__flag {
+  color: var(--color-green-strong);
+}
+
+.quiz-option.is-incorrect {
+  background: var(--tint-danger);
+  border-color: var(--color-danger-strong);
+}
+
+.quiz-option.is-incorrect .quiz-option__flag {
+  color: var(--color-danger-strong);
+}
+
+.quiz__feedback:not(:empty) {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg-secondary);
+  border-left: 4px solid var(--color-accent);
+}
+
+.quiz__verdict {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+}
+
+.quiz__verdict.is-correct {
+  color: var(--color-green-strong);
+}
+
+.quiz__verdict.is-incorrect {
+  color: var(--color-danger-strong);
+}
+
+.quiz__explanation {
+  margin: 0;
+  max-width: none;
+  color: var(--color-text-primary);
+}
+
+.quiz__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* --- Results --- */
+.result__category {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.result__score {
+  margin-bottom: 0.25rem;
+  font: 700 2.5rem/1.1 var(--font-mono);
+  color: var(--color-text-primary);
+}
+
+.result__percent {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+}
+
+.result__message {
+  color: var(--color-text-primary);
+}
+
+.result__best {
+  font-size: 0.9rem;
+}
+
+.result__warning {
+  padding: 0.5rem 0.8rem;
+  color: var(--color-energy-strong);
+  background: var(--tint-energy);
+  border-left: 4px solid var(--color-energy);
+}
+
+.result-review {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.result-review__item {
+  margin-bottom: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  border-left: 4px solid var(--color-control-border);
+}
+
+.result-review__item.is-correct {
+  background: var(--tint-green);
+  border-color: var(--color-green-strong);
+}
+
+.result-review__item.is-incorrect {
+  background: var(--tint-danger);
+  border-color: var(--color-danger-strong);
+}
+
+.result-review__item p {
+  margin: 0;
+  max-width: none;
+  color: var(--color-text-primary);
+}
+
+.result-review__item .result-review__answer {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   21. RESPONSIVE
+   ======================================== */
+@media (max-width: 991.98px) {
+  .city-layout {
+    grid-template-columns: minmax(0, 1fr);
   }
-  to {
-    transform: scale(1.006);
+
+  .directory-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    max-height: none;
+  }
+
+  .hero-section__scene-frame {
+    margin: 0 auto;
   }
 }
 
-/* --- Element 18: Cytoplasm environment --- */
-.cytoplasm-blob {
-  filter: url(#softBlur);
-}
-
-.cytoplasm-blob--a {
-  fill: var(--color-accent);
-  fill-opacity: 0.07;
-}
-
-.cytoplasm-blob--b {
-  fill: var(--color-accent-secondary);
-  fill-opacity: 0.06;
-}
-
-.cytoplasm-blob--c {
-  fill: var(--color-accent);
-  fill-opacity: 0.05;
-}
-
-.cytoplasm-particle {
-  fill: var(--color-accent);
-  fill-opacity: 0.3;
-  animation: particle-drift 7s ease-in-out infinite alternate;
-}
-
-.cytoplasm-particle.p2 {
-  animation-delay: -1.5s;
-}
-.cytoplasm-particle.p3 {
-  animation-delay: -3s;
-}
-.cytoplasm-particle.p4 {
-  animation-delay: -4.5s;
-}
-.cytoplasm-particle.p5 {
-  animation-delay: -2s;
-}
-.cytoplasm-particle.p6 {
-  animation-delay: -5s;
-}
-.cytoplasm-particle.p7 {
-  animation-delay: -0.5s;
-}
-
-@keyframes particle-drift {
-  from {
-    transform: translate(0, 0);
-    opacity: 0.6;
+@media (max-width: 767.98px) {
+  .lab-hero,
+  .challenges-hero {
+    flex-direction: column-reverse;
+    align-items: flex-start;
   }
-  to {
-    transform: translate(6px, -8px);
-    opacity: 1;
+
+  .lab-workbench,
+  .challenges-panel {
+    padding: 0.85rem;
+  }
+
+  .lab-tabs .nav-link {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.9rem;
   }
 }
 
-/* --- Element 19: Cytoskeleton roads --- */
-.road {
-  fill: none;
-  stroke-linecap: round;
-}
-
-.road--primary {
-  stroke: var(--color-accent);
-  stroke-opacity: 0.4;
-  stroke-width: 7;
-}
-
-.road--secondary {
-  stroke: var(--color-accent-secondary);
-  stroke-opacity: 0.3;
-  stroke-width: 4;
-}
-
-.road--tertiary {
-  stroke: var(--color-text-secondary);
-  stroke-opacity: 0.25;
-  stroke-width: 2;
-}
-
-/* --- Reduced motion --- */
-@media (prefers-reduced-motion: reduce) {
-  .cell-membrane,
-  .cytoplasm-particle {
-    animation: none;
-  }
-}
-
-/* --- Responsive adjustments --- */
-@media (max-width: 600px) {
-  .cell-city-map {
-    padding: 1rem;
+@media (max-width: 575.98px) {
+  /* Map text would shrink below readable size; the directory names every structure. */
+  .map-label {
+    display: none;
   }
 
-  .cell-city-status {
+  .organelle-modal__sprite {
+    width: 72px;
+    height: 60px;
+  }
+
+  .quiz-option {
     flex-wrap: wrap;
+  }
+
+  .quiz-option__flag {
+    flex-basis: 100%;
+    padding-left: 2.55rem;
+  }
+
+  .mut-cell {
+    width: 1.5rem;
+  }
+}
+
+/* ========================================
+   22. REDUCED MOTION
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card,
+  .btn-cell-city,
+  .quiz-progress__bar {
+    transition: none;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+
+  .btn-cell-city--primary:hover,
+  .btn-cell-city--primary:active {
+    transform: none;
   }
 }

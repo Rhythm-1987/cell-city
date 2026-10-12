@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cell City</title>
+    <meta name="description" content="Explore the cell like a living city: an interactive pixel-art cell, a bioinformatics lab and biology challenges." />
 
     <!-- Bootstrap (structural components only — Cell City look comes from style.css below) -->
     <link
@@ -15,6 +16,10 @@
     <link rel="stylesheet" href="css/style.css" />
 
     <script src="js/main.js" defer></script>
+    <script src="data/sprites.js" defer></script>
+    <script src="data/organelles.js" defer></script>
+    <script src="js/pixel.js" defer></script>
+    <script src="js/scene.js" defer></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg cell-city-navbar">
@@ -81,33 +86,24 @@
               <p class="hero-section__eyebrow">Cell City</p>
               <h1 class="hero-section__heading">Explore the cell like a living city.</h1>
               <p class="hero-section__lead">
-                Cell City transforms the microscopic cell into an interactive
-                city, where structures and systems work together to keep the
-                whole thing running.
+                Wander through a pixel-art city built inside a cell, investigate
+                DNA in the Bio Lab and test what you've learned with short
+                challenges.
               </p>
               <div class="hero-section__actions">
-                <a class="btn-cell-city" href="city.html">Enter the City</a>
+                <a class="btn-cell-city btn-cell-city--primary" href="city.html">Enter the City</a>
               </div>
             </div>
             <div class="col-lg-6 hero-section__media">
-              <div class="hero-section__atmosphere" aria-hidden="true"></div>
-
-              <!--
-              RECOMMENDED HERO ASSET:
-              A clean, modern biological-cell illustration/3D cutaway,
-              no labels, isolated or transparent background,
-              light scientific aesthetic, teal/green accents,
-              approximately 1200×900 or similar landscape ratio.
-              Replace this placeholder when the final asset is selected.
-              -->
-              <div class="hero-section__placeholder" role="presentation">
-                <span class="hero-section__placeholder-label">Hero visual placeholder</span>
-                <span class="hero-section__placeholder-note">
-                  Recommended visual: minimal scientific illustration of a
-                  biological cell, without labels, with a clean light
-                  background or transparent background, using teal/green
-                  accents and a soft organic form.
-                </span>
+              <div class="hero-section__scene-frame pixel-frame">
+                <!-- Pixel-art cell city, drawn by js/scene.js -->
+                <svg
+                  class="hero-section__scene"
+                  data-cell-scene
+                  viewBox="60 36 880 568"
+                  role="img"
+                  aria-label="Pixel-art illustration of a cell drawn as a small city, with a city-hall nucleus, power plants, protein factories and roads inside a cell membrane."
+                ></svg>
               </div>
             </div>
           </div>
@@ -129,18 +125,18 @@
           <div class="row concept-pillars">
             <div class="col-md-4 concept-pillar">
               <h3 class="concept-pillar__title">Explore</h3>
-              <p class="concept-pillar__desc">Interact with the cell.</p>
+              <p class="concept-pillar__desc">Discover the cell through interaction.</p>
             </div>
             <div class="col-md-4 concept-pillar">
               <h3 class="concept-pillar__title">Understand</h3>
               <p class="concept-pillar__desc">
-                Connect city metaphors to real biology.
+                Connect city analogies to real biological functions.
               </p>
             </div>
             <div class="col-md-4 concept-pillar">
               <h3 class="concept-pillar__title">Apply</h3>
               <p class="concept-pillar__desc">
-                Test what you've learned through labs and challenges.
+                Use the Bio Lab and challenges to practise what you learn.
               </p>
             </div>
           </div>
@@ -154,77 +150,36 @@
           <div class="row explore-section__cards">
             <div class="col-md-4">
               <article class="feature-card">
-                <svg
-                  class="feature-card__icon feature-card__icon--cell"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="2" />
-                  <circle cx="24" cy="24" r="7" fill="currentColor" />
-                  <circle cx="34" cy="16" r="2.4" fill="currentColor" />
-                  <circle cx="14" cy="32" r="2" fill="currentColor" />
-                </svg>
+                <span class="feature-card__sprite" data-sprite="nucleus" data-scale="2"></span>
                 <h3 class="feature-card__title">Interactive Cell City</h3>
                 <p class="feature-card__desc">
-                  Explore the cell visually and discover how its structures
-                  work together.
+                  Explore the cell and discover how its structures work
+                  together.
                 </p>
-                <a class="feature-card__link" href="city.html">Enter the City →</a>
+                <a class="feature-card__link" href="city.html">Enter the City &rarr;</a>
               </article>
             </div>
 
             <div class="col-md-4">
               <article class="feature-card">
-                <svg
-                  class="feature-card__icon feature-card__icon--lab"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path
-                    d="M18 6h12M19 6v12l-9 20a4 4 0 0 0 4 6h20a4 4 0 0 0 4-6l-9-20V6"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path d="M14 30h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
+                <span class="feature-card__sprite" data-sprite="flask" data-scale="3"></span>
                 <h3 class="feature-card__title">Bioinformatics Lab</h3>
                 <p class="feature-card__desc">
-                  Work with biological sequences and explore molecular
+                  Analyse biological sequences and explore molecular
                   information.
                 </p>
-                <a class="feature-card__link" href="bio-lab.html">Enter the Lab →</a>
+                <a class="feature-card__link" href="bio-lab.html">Enter the Lab &rarr;</a>
               </article>
             </div>
 
             <div class="col-md-4">
               <article class="feature-card">
-                <svg
-                  class="feature-card__icon feature-card__icon--challenges"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="2" />
-                  <path
-                    d="M16 25l6 6 12-14"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                <span class="feature-card__sprite" data-sprite="trophy" data-scale="3"></span>
                 <h3 class="feature-card__title">Challenges</h3>
                 <p class="feature-card__desc">
-                  Test your understanding through short interactive biology
-                  challenges.
+                  Test understanding through interactive biology questions.
                 </p>
-                <a class="feature-card__link" href="challenges.html">Take a Challenge →</a>
+                <a class="feature-card__link" href="challenges.html">Take a Challenge &rarr;</a>
               </article>
             </div>
           </div>
@@ -235,10 +190,9 @@
       <section class="closing-section">
         <div class="container-fluid page-container">
           <p class="closing-section__statement">
-            A cell is more than a collection of parts.
-            It's a system that works together.
+            A cell is more than a collection of parts. It's a system that
+            works together.
           </p>
-          <a class="closing-section__link" href="city.html">Enter the City &rarr;</a>
         </div>
       </section>
     </main>
@@ -281,7 +235,7 @@
       </div>
     </footer>
 
-    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar's collapse/toggler behavior -->
+    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar toggler, modals, tabs and accordions -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cell City — Challenges</title>
+    <meta name="description" content="Test your knowledge of cells, DNA and bioinformatics with short interactive challenges." />
 
     <!-- Bootstrap (structural components only — Cell City look comes from style.css below) -->
     <link
@@ -15,6 +16,10 @@
     <link rel="stylesheet" href="css/style.css" />
 
     <script src="js/main.js" defer></script>
+    <script src="data/sprites.js" defer></script>
+    <script src="data/challenges.js" defer></script>
+    <script src="js/pixel.js" defer></script>
+    <script src="js/challenges.js" defer></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg cell-city-navbar">
@@ -73,13 +78,27 @@
       </div>
     </nav>
     <main>
-      <section>
-        <h2>Challenges</h2>
-        <p>Complete challenges to test your knowledge of Cell City.</p>
-        <p>This section will be developed during Phase 7.</p>
+      <section class="challenges-section">
+        <div class="container-fluid page-container">
+          <div class="challenges-hero">
+            <div class="challenges-hero__text">
+              <h1>Challenges</h1>
+              <p class="lab-hero__lead">
+                Short, focused quizzes on cells, DNA and the Bio Lab. Pick a
+                challenge, answer each question and read the explanation to
+                learn why.
+              </p>
+            </div>
+            <span class="challenges-hero__art" data-sprite="trophy" data-scale="4"></span>
+          </div>
+
+          <!-- Rendered by the shared challenge engine (js/challenges.js) -->
+          <div id="challengeApp" data-challenge-app class="challenges-panel pixel-frame">
+            <noscript><p>Challenges need JavaScript to run.</p></noscript>
+          </div>
+        </div>
       </section>
     </main>
-
     <footer class="cell-city-footer">
       <div class="cell-city-footer__content">
         <div class="cell-city-footer__brand">
@@ -119,7 +138,7 @@
       </div>
     </footer>
 
-    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar's collapse/toggler behavior -->
+    <!-- Bootstrap JS bundle (includes Popper) — powers the navbar toggler, modals, tabs and accordions -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer
